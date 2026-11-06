@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plán opakování</title>
+<style>
+  :root {
+    --bg: #faf7f2; --karta: #ffffff; --text: #2b2b2b; --slaby: #8a8580;
+    --akcent: #b23a3a; --hotovo: #2f7d4f; --hotovo-bg: #e8f4ec; --cara: #e6e0d8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 16px 16px 40px; }
+  h1 { font-size: 22px; margin: 4px 0 2px; }
+  .podtitul { color: var(--slaby); font-size: 14px; margin: 0 0 14px; }
+  .tydny { display: flex; gap: 6px; margin-bottom: 12px; }
+  .tydny button { flex: 1; padding: 10px 0; border: 1px solid var(--cara); border-radius: 10px;
+                  background: var(--karta); font: inherit; font-weight: 600; color: var(--text); cursor: pointer; }
+  .tydny button.vybrany { background: var(--akcent); border-color: var(--akcent); color: #fff; }
+  .tydny button small { display: block; font-weight: 400; font-size: 11px; opacity: .8; }
+  .postup { height: 8px; background: var(--cara); border-radius: 4px; overflow: hidden; margin: 4px 0 4px; }
+  .postup div { height: 100%; background: var(--hotovo); width: 0; transition: width .3s; }
+  .postup-text { font-size: 13px; color: var(--slaby); margin-bottom: 14px; }
+  .den { margin: 18px 0 6px; font-size: 13px; font-weight: 700; text-transform: uppercase;
+         letter-spacing: .04em; color: var(--slaby); }
+  .den.dnes { color: var(--akcent); }
+  .ukol { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+          padding: 14px; margin-bottom: 8px; border: 1px solid var(--cara); border-radius: 12px;
+          background: var(--karta); font: inherit; color: var(--text); cursor: pointer; }
+  .ukol .policko { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 2px solid #c9c1b6;
+                   display: grid; place-items: center; font-size: 18px; color: #fff; }
+  .ukol.hotovo { background: var(--hotovo-bg); border-color: #bfdcc8; }
+  .ukol.hotovo .policko { background: var(--hotovo); border-color: var(--hotovo); }
+  .ukol.hotovo .policko::after { content: "✓"; }
+  .ukol .text { flex: 1; }
+  .ukol .kdy { font-size: 12px; color: var(--slaby); }
+  .ukol .cas { flex: none; font-size: 13px; color: var(--slaby); }
+  .ukol.ceka { opacity: .6; }
+  .volno { padding: 12px 14px; margin-bottom: 8px; border-radius: 12px; border: 1px dashed var(--cara);
+           color: var(--slaby); font-size: 14px; }
+  .zprava { padding: 12px 14px; border-radius: 10px; background: #fdecec; color: #8a2525;
+            font-size: 14px; margin-bottom: 12px; display: none; }
+  .nacitani { color: var(--slaby); padding: 24px 0; text-align: center; }
+  .tip { font-size: 13px; color: var(--slaby); margin-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Plán opakování čínštiny</h1>
+  <p class="podtitul">Ťukni na úkol, když ho máš hotový.</p>
+  <div class="zprava" id="zprava"></div>
+  <div class="tydny" id="tydny"></div>
+  <div class="postup"><div id="postupBar"></div></div>
+  <div class="postup-text" id="postupText"></div>
+  <div id="seznam"><div class="nacitani">Načítám…</div></div>
+  <p class="tip">Nestihneš-li někdy všechno, udělej aspoň Anki.</p>
+</main>
+
+<script>
+  var stav = null;
+  var tyden = null;
+  var KLIC = 'planOpakovani.tyden';
+
+  function ulozTyden(t) { try { localStorage.setItem(KLIC, String(t)); } catch (e) {} }
+  function nactiTyden() { try { var v = localStorage.getItem(KLIC); return v === null ? null : Number(v); } catch (e) { return null; } }
+
+  function ukaz(text) {
+    var z = document.getElementById('zprava');
+    z.textContent = text; z.style.display = text ? 'block' : 'none';
+  }
+
+  function ukoly() { return stav.radky.filter(function (r) { return !r.volno; }); }
+
+  function hotovoVTydnu(t) {
+    return ukoly().filter(function (r) { return r.hotovo[t]; }).length;
+  }
+
+  function vychoziTyden() {
+    if (stav.tyden !== null && stav.tyden !== undefined) return stav.tyden;   // podle data z tabulky
+    var ulozeny = nactiTyden();
+    if (ulozeny !== null && ulozeny >= 0 && ulozeny < stav.tydny) return ulozeny;
+    for (var t = 0; t < stav.tydny; t++) if (hotovoVTydnu(t) < ukoly().length) return t;
+    return stav.tydny - 1;
+  }
+
+  function vykresli() {
+    var celkem = ukoly().length;
+    var tl = document.getElementById('tydny');
+    tl.innerHTML = '';
+    for (var t = 0; t < stav.tydny; t++) {
+      var b = document.createElement('button');
+      b.className = t === tyden ? 'vybrany' : '';
+      b.innerHTML = (t + 1) + '. týden<small>' + (t === stav.tyden ? 'teď · ' : '') + hotovoVTydnu(t) + '/' + celkem + '</small>';
+      b.onclick = (function (tt) { return function () { tyden = tt; ulozTyden(tt); vykresli(); }; })(t);
+      tl.appendChild(b);
+    }
+    var h = hotovoVTydnu(tyden);
+    document.getElementById('postupBar').style.width = (celkem ? 100 * h / celkem : 0) + '%';
+    document.getElementById('postupText').textContent = 'Hotovo ' + h + ' z ' + celkem +
+      (h === celkem && celkem ? ' – skvělá práce!' : '');
+
+    var s = document.getElementById('seznam');
+    s.innerHTML = '';
+    var posledniDen = null;
+    stav.radky.forEach(function (r) {
+      if (r.den !== posledniDen) {
+        var d = document.createElement('div');
+        var dnes = jeDnes(r.den);
+        d.className = 'den' + (dnes ? ' dnes' : ''); d.textContent = r.den + (dnes ? ' · dnes' : '');
+        s.appendChild(d); posledniDen = r.den;
+      }
+      if (r.volno) {
+        var v = document.createElement('div');
+        v.className = 'volno'; v.textContent = 'Volno – dnes žádná čínština.';
+        s.appendChild(v); return;
+      }
+      var b = document.createElement('button');
+      b.className = 'ukol' + (r.hotovo[tyden] ? ' hotovo' : '');
+      var pol = document.createElement('span'); pol.className = 'policko';
+      var txt = document.createElement('span'); txt.className = 'text';
+      var kdy = document.createElement('div'); kdy.className = 'kdy'; kdy.textContent = r.kdy;
+      var akt = document.createElement('div'); akt.textContent = r.aktivita;
+      txt.appendChild(kdy); txt.appendChild(akt);
+      var cas = document.createElement('span'); cas.className = 'cas'; cas.textContent = r.cas;
+      b.appendChild(pol); b.appendChild(txt); b.appendChild(cas);
+      b.onclick = function () { prepni(r, b); };
+      s.appendChild(b);
+    });
+  }
+
+  function cisloDne(text) {                     // „Den hodiny“ = 0, „3. den (lehký)“ = 3
+    if (/^den hodiny/i.test(text)) return 0;
+    var m = /^(\d+)\./.exec(text);
+    return m ? Number(m[1]) : null;
+  }
+
+  function jeDnes(text) {
+    if (stav.den === null || stav.den === undefined || tyden !== stav.tyden) return false;
+    var c = cisloDne(text);
+    if (c === null) return false;
+    return c === stav.den;
+  }
+
+  function prepni(r, b) {
+    var t = tyden;
+    var nova = !r.hotovo[t];
+    r.hotovo[t] = nova;
+    vykresli();
+    ukaz('');
+    api({ akce: 'nastav', radek: r.radek, tyden: t, hodnota: nova ? 1 : 0 })
+      .catch(function () {
+        r.hotovo[t] = !nova;
+        vykresli();
+        ukaz('Nepodařilo se uložit. Zkontroluj připojení k internetu a ťukni znovu.');
+      });
+  }
+
+  // Adresa skriptu studenta: odkaz ve tvaru …/plan-opakovani/?id=AKfycb…  (ID z URL webové aplikace)
+  var ID = new URLSearchParams(location.search).get('id') || '';
+  var API = 'https://script.google.com/macros/s/' + encodeURIComponent(ID) + '/exec';
+  KLIC = 'planOpakovani.tyden.' + ID;
+
+  function api(param) {
+    var q = Object.keys(param).map(function (k) { return k + '=' + encodeURIComponent(param[k]); }).join('&');
+    return fetch(API + '?' + q, { method: 'GET', credentials: 'omit', cache: 'no-store' })
+      .then(function (odp) { if (!odp.ok) throw new Error('HTTP ' + odp.status); return odp.json(); })
+      .then(function (data) { if (data && data.chyba) throw new Error(data.chyba); return data; });
+  }
+
+  function start() {
+    if (!ID) {
+      document.getElementById('seznam').innerHTML = '';
+      ukaz('V odkazu chybí kód studenta (…/?id=…). Požádej lektorku o celý odkaz.');
+      return;
+    }
+    api({ akce: 'stav' })
+      .then(function (data) {
+        stav = data;
+        if (!stav.radky.length) {
+          document.getElementById('seznam').innerHTML = '<div class="nacitani">V plánu nejsou žádné aktivity.</div>';
+          return;
+        }
+        tyden = vychoziTyden();
+        vykresli();
+      })
+      .catch(function () {
+        document.getElementById('seznam').innerHTML = '';
+        ukaz('Plán se nepodařilo načíst. Zkontroluj připojení a obnov stránku.');
+      });
+  }
+  start();
+</script>
+</body>
+</html>
