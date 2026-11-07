@@ -102,6 +102,7 @@
   <div class="tydny" id="tydny"></div>
   <div class="cesta" id="cesta" style="display:none"></div>
   <div id="seznam"><div class="nacitani">Načítám…</div></div>
+  <p class="tip" id="dokChyba" style="display:none"></p>
   <p class="tip">Nestihneš-li někdy všechno, udělej aspoň Anki.</p>
 </main>
 
@@ -197,6 +198,9 @@
       (hod < 18 ? 'Hezký den! 🌤️' : 'Hezký večer! 🌙');
 
     var od = odkazyTydne();
+    var dc = document.getElementById('dokChyba');
+    dc.style.display = stav.dokChyba ? 'block' : 'none';
+    dc.textContent = stav.dokChyba ? 'Odkazy z dokumentu se nepodařilo načíst: ' + stav.dokChyba : '';
     var ob = document.getElementById('odkazy');
     ob.innerHTML = '';
     [['prezentace', '📖', 'Prezentace'], ['dialog', '💬', 'Dialog'], ['tony', '🎧', 'Tóny'], ['quizlet', '🃏', 'Quizlet']].forEach(function (p) {
