@@ -6,47 +6,77 @@
 <title>Plán opakování</title>
 <style>
   :root {
-    --bg: #faf7f2; --karta: #ffffff; --text: #2b2b2b; --slaby: #8a8580;
-    --akcent: #b23a3a; --hotovo: #2f7d4f; --hotovo-bg: #e8f4ec; --cara: #e6e0d8;
+    --bg: #f4f6f7; --karta: #ffffff; --text: #26323a; --slaby: #7b8790;
+    --akcent: #e0614f; --hotovo: #2fa37a; --cara: #dfe7ec; --tyden: #f4b942; --tyden-svetla: #fdf3dc;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
          font: 16px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-  main { max-width: 560px; margin: 0 auto; padding: 16px 16px 40px; }
-  h1 { font-size: 22px; margin: 4px 0 2px; }
+  main { max-width: 560px; margin: 0 auto; padding: 18px 16px 40px; }
+  .pozdrav { font-size: 14px; color: var(--slaby); margin: 0; }
+  h1 { font-size: 26px; margin: 2px 0 2px; letter-spacing: -.01em; }
   .podtitul { color: var(--slaby); font-size: 14px; margin: 0 0 14px; }
-  .tydny { display: flex; gap: 6px; margin-bottom: 12px; }
-  .tydny button { flex: 1; padding: 10px 0; border: 1px solid var(--cara); border-radius: 10px;
-                  background: var(--karta); font: inherit; font-weight: 600; color: var(--text); cursor: pointer; }
-  .tydny button.vybrany { background: var(--akcent); border-color: var(--akcent); color: #fff; }
-  .tydny button small { display: block; font-weight: 400; font-size: 11px; opacity: .8; }
-  .postup { height: 8px; background: var(--cara); border-radius: 4px; overflow: hidden; margin: 4px 0 4px; }
-  .postup div { height: 100%; background: var(--hotovo); width: 0; transition: width .3s; }
-  .postup-text { font-size: 13px; color: var(--slaby); margin-bottom: 14px; }
-  .den { margin: 18px 0 6px; font-size: 13px; font-weight: 700; text-transform: uppercase;
-         letter-spacing: .04em; color: var(--slaby); }
-  .den.dnes { color: var(--akcent); }
-  .ukol { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
-          padding: 14px; margin-bottom: 8px; border: 1px solid var(--cara); border-radius: 12px;
-          background: var(--karta); font: inherit; color: var(--text); cursor: pointer; }
-  .ukol .policko { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 2px solid #c9c1b6;
-                   display: grid; place-items: center; font-size: 18px; color: #fff; }
-  .ukol.hotovo { background: var(--hotovo-bg); border-color: #bfdcc8; }
-  .ukol.hotovo .policko { background: var(--hotovo); border-color: var(--hotovo); }
-  .ukol.hotovo .policko::after { content: "✓"; }
-  .ukol .text { flex: 1; }
-  .ukol .kdy { font-size: 12px; color: var(--slaby); }
+  .odkazy { display: flex; gap: 8px; margin: 0 0 14px; }
+  .odkazy:empty { display: none; }
+  .odkazy a { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
+              text-decoration: none; padding: 9px 2px 8px; border-radius: 14px; background: var(--karta);
+              color: var(--text); font-weight: 700; font-size: 13px; white-space: nowrap;
+              box-shadow: 0 1px 3px rgba(30,50,60,.12); }
+  .odkazy a b { font-size: 20px; line-height: 1.1; }
+  .tydny { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tydny button { flex: 1; padding: 9px 0 7px; border: 1px solid var(--cara); border-radius: 14px; font: inherit;
+                  font-weight: 700; font-size: 14px; cursor: pointer; color: var(--text); background: var(--karta); }
+  .tydny button.vybrany { background: var(--tyden); border-color: var(--tyden); color: #fff;
+                          box-shadow: 0 3px 8px rgba(30,50,60,.18); }
+  .tydny button small { display: block; font-weight: 500; font-size: 11px; opacity: .95; }
+  .cesta { padding: 2px 4px 0; margin-bottom: 14px; }
+  .cesta-hlava { display: flex; justify-content: space-between; font-size: 12px; color: var(--slaby); margin-bottom: 6px; }
+  .cesta-hlava b { color: var(--text); }
+  .zastavky { position: relative; display: flex; justify-content: space-between; }
+  .zastavky::before { content: ""; position: absolute; left: 7px; right: 7px; top: 6px; height: 2px;
+                      background: #d3dde3; border-radius: 1px; }
+  .zastavky .ujeto { position: absolute; left: 7px; top: 6px; height: 2px; border-radius: 1px;
+                     background: var(--tyden); transition: width .4s; }
+  .zastavka { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+              color: var(--slaby); width: 14px; }
+  .zastavka i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: block;
+                background: var(--bg); border: 2px solid #c9d4da; }
+  .zastavka span { font-size: 10px; line-height: 1.2; }
+  .zastavka.hotova i { background: var(--tyden); border-color: var(--tyden); }
+  .zastavka.dnes i { border-color: var(--akcent); background: var(--karta); }
+  .zastavka.dnes { color: var(--akcent); font-weight: 700; }
+  .zastavka.zvolno i { border-style: dashed; }
+  .karta-dne { background: var(--karta); border-radius: 18px; margin-bottom: 14px; overflow: hidden;
+               box-shadow: 0 1px 3px rgba(30,50,60,.10); }
+  .karta-dne.dnes { box-shadow: 0 0 0 2px var(--akcent), 0 4px 14px rgba(30,50,60,.12); }
+  .hlava-dne { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px;
+               font-weight: 800; font-size: 17px; border-bottom: 1px solid var(--cara); }
+  .hlava-dne .stitek { font-size: 12px; font-weight: 700; background: var(--akcent); color: #fff;
+                       border-radius: 999px; padding: 3px 10px; }
+  .hlava-dne .hotovo-dne { font-size: 13px; font-weight: 600; color: var(--slaby); }
+  .ukol { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none;
+          padding: 12px 14px; border: 0; border-top: 1px solid var(--cara); font: inherit; color: var(--text); cursor: pointer; }
+  .ukol .ikona { flex: none; font-size: 20px; width: 26px; text-align: center; }
+  .ukol .text { flex: 1; min-width: 0; }
+  .ukol .kdy { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 7px;
+               margin-bottom: 2px; background: #eef1f3; color: var(--slaby); text-transform: uppercase; letter-spacing: .04em; }
+  .ukol .kdy.rano { background: #fff1cc; color: #9a6b00; }
+  .ukol .kdy.vecer { background: #e3e6fa; color: #4a4f9c; }
+  .ukol .nazev { font-weight: 600; }
   .ukol .cas { flex: none; font-size: 13px; color: var(--slaby); }
-  .ukol.ceka { opacity: .6; }
-  .volno { padding: 12px 14px; margin-bottom: 8px; border-radius: 12px; border: 1px dashed var(--cara);
-           color: var(--slaby); font-size: 14px; }
-  .zprava { padding: 12px 14px; border-radius: 10px; background: #fdecec; color: #8a2525;
+  .ukol .policko { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #c5d0d6;
+                   display: grid; place-items: center; font-size: 17px; color: #fff; }
+  .ukol.hotovo .nazev { color: var(--slaby); }
+  .ukol.hotovo .policko { background: var(--hotovo); border-color: var(--hotovo); animation: fajfka .35s ease-out; }
+  .ukol.hotovo .policko::after { content: "✓"; }
+  @keyframes fajfka { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+  .otevrit { display: block; text-align: right; text-decoration: none; font-size: 13px; font-weight: 700;
+             color: var(--akcent); padding: 0 14px 10px; margin-top: -4px; }
+  .volno { padding: 14px; color: var(--slaby); font-size: 15px; border-top: 1px solid var(--cara); }
+  .zprava { padding: 12px 14px; border-radius: 12px; background: #fdecec; color: #8a2525;
             font-size: 14px; margin-bottom: 12px; display: none; }
   .nacitani { color: var(--slaby); padding: 24px 0; text-align: center; }
-  .tip { font-size: 13px; color: var(--slaby); margin-top: 18px; }
-  .hlavicka { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .zvuk { flex: none; border: 1px solid var(--cara); background: var(--karta); border-radius: 10px;
-          font-size: 20px; width: 44px; height: 44px; cursor: pointer; margin-top: 4px; }
+  .tip { font-size: 13px; color: var(--slaby); margin-top: 6px; text-align: center; }
   #platno { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
   .pop { position: fixed; z-index: 60; pointer-events: none; font-size: 44px; transform: translate(-50%, -50%);
          animation: pop 1.1s ease-out forwards; }
@@ -59,23 +89,18 @@
   @keyframes banner { 0% { opacity: 0; transform: translate(-50%, -40%) scale(.8); }
                       12% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
                       80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -55%); } }
-  .ukol.hotovo .policko { animation: fajfka .35s ease-out; }
-  @keyframes fajfka { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
 </style>
 </head>
 <body>
 <main>
   <canvas id="platno"></canvas>
-  <div class="hlavicka">
-    <div>
-      <h1>Plán opakování čínštiny</h1>
-      <p class="podtitul">Ťukni na úkol, když ho máš hotový.</p>
-    </div>
-  </div>
+  <p class="pozdrav" id="pozdrav"></p>
+  <h1>Plán opakování</h1>
+  <p class="podtitul">Ťukni na úkol, když ho máš hotový.</p>
   <div class="zprava" id="zprava"></div>
+  <div class="odkazy" id="odkazy"></div>
   <div class="tydny" id="tydny"></div>
-  <div class="postup"><div id="postupBar"></div></div>
-  <div class="postup-text" id="postupText"></div>
+  <div class="cesta" id="cesta" style="display:none"></div>
   <div id="seznam"><div class="nacitani">Načítám…</div></div>
   <p class="tip">Nestihneš-li někdy všechno, udělej aspoň Anki.</p>
 </main>
@@ -107,48 +132,149 @@
     return stav.tydny - 1;
   }
 
+  function odkazyTydne() {
+    var o = (stav.odkazy || [])[tyden];
+    return (o && typeof o === 'object') ? o : {};       // starší uložený stav (jen text) ignorovat
+  }
+
+  function druhOdkazu(aktivita) {                      // ke kterému úkolu patří který odkaz
+    var t = String(aktivita).toLowerCase();
+    if (t.indexOf('tóny') >= 0) return 'tony';
+    if (t.indexOf('dialog') >= 0) return 'dialog';
+    if (t.indexOf('prezentace') >= 0) return 'prezentace';
+    if (t.indexOf('quizlet') >= 0) return 'quizlet';
+    return '';
+  }
+
+  var BARVY_TYDNU = ['#3b6f8f'];                       // jedna klidná barva pro vybraný týden a cestu
+  var SVETLE_TYDNU = ['#e6eef3'];
+  var BARVY_DNU = ['#f3f6f8'];                          // všechna záhlaví dnů stejně jemně šedá
+
+  function el(tag, trida, text) { var e = document.createElement(tag); if (trida) e.className = trida; if (text !== undefined) e.textContent = text; return e; }
+
+  function ikonaKdy(kdy) {
+    var k = String(kdy).toLowerCase();
+    if (k.indexOf('ráno') >= 0) return '☀️';
+    if (k.indexOf('večer') >= 0) return '🌙';
+    if (k.indexOf('hodin') >= 0) return '🏫';
+    return '•';
+  }
+  function ikonaAktivity(akt) {
+    var a = String(akt).toLowerCase();
+    if (a.indexOf('tóny') >= 0) return '🎧';
+    if (a.indexOf('dialog') >= 0) return '💬';
+    if (a.indexOf('prezentace') >= 0) return '📖';
+    if (a.indexOf('anki') >= 0) return '🧠';
+    if (a.indexOf('quizlet') >= 0) return '🃏';
+    if (a.indexOf('psaní') >= 0) return '✍️';
+    if (a.indexOf('vět') >= 0) return '📝';
+    return '⭐';
+  }
+
+  function dny() {                                     // skupiny řádků podle dne, v pořadí z tabulky
+    var vys = [], mapa = {};
+    stav.radky.forEach(function (r) {
+      if (!mapa[r.den]) { mapa[r.den] = { den: r.den, radky: [] }; vys.push(mapa[r.den]); }
+      mapa[r.den].radky.push(r);
+    });
+    return vys;
+  }
+
+  function zkratkaDne(text) { var c = cisloDne(text); return c === null ? '•' : (c === 0 ? 'H' : String(c)); }
+
   function vykresli() {
+    var barva = BARVY_TYDNU[tyden % BARVY_TYDNU.length];
+    document.documentElement.style.setProperty('--tyden', barva);
+    document.documentElement.style.setProperty('--tyden-svetla', SVETLE_TYDNU[tyden % SVETLE_TYDNU.length]);
+    var hod = new Date().getHours();
+    document.getElementById('pozdrav').textContent = hod < 11 ? 'Dobré ráno! ☀️ Skvělý start do dne.' :
+      (hod < 18 ? 'Hezký den! 🌤️' : 'Hezký večer! 🌙');
+
+    var od = odkazyTydne();
+    var ob = document.getElementById('odkazy');
+    ob.innerHTML = '';
+    [['prezentace', '📖', 'Prezentace'], ['dialog', '💬', 'Dialog'], ['tony', '🎧', 'Tóny'], ['quizlet', '🃏', 'Quizlet']].forEach(function (p) {
+      if (!od[p[0]]) return;
+      var a = el('a', ''); a.href = od[p[0]]; a.target = '_blank'; a.rel = 'noopener';
+      a.appendChild(el('b', '', p[1])); a.appendChild(el('span', '', p[2]));
+      ob.appendChild(a);
+    });
+
     var celkem = ukoly().length;
     var tl = document.getElementById('tydny');
     tl.innerHTML = '';
     for (var t = 0; t < stav.tydny; t++) {
-      var b = document.createElement('button');
-      b.className = t === tyden ? 'vybrany' : '';
+      var b = el('button', t === tyden ? 'vybrany' : '');
       b.innerHTML = (t + 1) + '. týden<small>' + (t === stav.tyden ? 'teď · ' : '') + hotovoVTydnu(t) + '/' + celkem + '</small>';
       b.onclick = (function (tt) { return function () { tyden = tt; vybralSam = true; ulozTyden(tt); vykresli(); }; })(t);
       tl.appendChild(b);
     }
-    var h = hotovoVTydnu(tyden);
-    document.getElementById('postupBar').style.width = (celkem ? 100 * h / celkem : 0) + '%';
-    document.getElementById('postupText').textContent = 'Hotovo ' + h + ' z ' + celkem +
-      (h === celkem && celkem ? ' – skvělá práce!' : '');
 
+    // cesta týdnem: zastávka za každý den
+    var skupiny = dny();
+    var cesta = document.getElementById('cesta');
+    cesta.style.display = 'block';
+    cesta.innerHTML = '';
+    var h = hotovoVTydnu(tyden);
+    var hl = el('div', 'cesta-hlava');
+    hl.innerHTML = '<span>Cesta ' + (tyden + 1) + '. týdnem</span><span>Hotovo <b>' + h + ' z ' + celkem + '</b>' +
+      (h === celkem && celkem ? ' 🏆' : '') + '</span>';
+    cesta.appendChild(hl);
+    var zast = el('div', 'zastavky');
+    var ujeto = el('div', 'ujeto'); zast.appendChild(ujeto);
+    var posledniHotova = -1;
+    skupiny.forEach(function (g, i) {
+      var uk = g.radky.filter(function (r) { return !r.volno; });
+      var volno = !uk.length;
+      var hotova = !volno && uk.every(function (r) { return r.hotovo[tyden]; });
+      if (hotova || (volno && posledniHotova === i - 1)) posledniHotova = i;
+      var z = el('div', 'zastavka' + (hotova ? ' hotova' : '') + (volno ? ' zvolno' : '') + (jeDnes(g.den) ? ' dnes' : ''));
+      var kr = el('i', '');
+      z.appendChild(kr); z.appendChild(el('span', '', zkratkaDne(g.den)));
+      zast.appendChild(z);
+    });
+    cesta.appendChild(zast);
+    var n = skupiny.length;
+    requestAnimationFrame(function () {
+      var sirka = zast.clientWidth - 14;
+      ujeto.style.width = (n > 1 && posledniHotova > 0 ? sirka * posledniHotova / (n - 1) : 0) + 'px';
+    });
+
+    // karty dnů
     var s = document.getElementById('seznam');
     s.innerHTML = '';
-    var posledniDen = null;
-    stav.radky.forEach(function (r) {
-      if (r.den !== posledniDen) {
-        var d = document.createElement('div');
-        var dnes = jeDnes(r.den);
-        d.className = 'den' + (dnes ? ' dnes' : ''); d.textContent = r.den + (dnes ? ' · dnes' : '');
-        s.appendChild(d); posledniDen = r.den;
-      }
-      if (r.volno) {
-        var v = document.createElement('div');
-        v.className = 'volno'; v.textContent = 'Volno – dnes žádná čínština.';
-        s.appendChild(v); return;
-      }
-      var b = document.createElement('button');
-      b.className = 'ukol' + (r.hotovo[tyden] ? ' hotovo' : '');
-      var pol = document.createElement('span'); pol.className = 'policko';
-      var txt = document.createElement('span'); txt.className = 'text';
-      var kdy = document.createElement('div'); kdy.className = 'kdy'; kdy.textContent = r.kdy;
-      var akt = document.createElement('div'); akt.textContent = r.aktivita;
-      txt.appendChild(kdy); txt.appendChild(akt);
-      var cas = document.createElement('span'); cas.className = 'cas'; cas.textContent = r.cas;
-      b.appendChild(pol); b.appendChild(txt); b.appendChild(cas);
-      b.onclick = function () { prepni(r, b); };
-      s.appendChild(b);
+    skupiny.forEach(function (g, i) {
+      var dnes = jeDnes(g.den);
+      var karta = el('div', 'karta-dne' + (dnes ? ' dnes' : ''));
+      var hlava = el('div', 'hlava-dne');
+      hlava.style.background = BARVY_DNU[i % BARVY_DNU.length];
+      hlava.appendChild(el('span', '', g.den));
+      var uk = g.radky.filter(function (r) { return !r.volno; });
+      if (dnes) hlava.appendChild(el('span', 'stitek', 'dnes'));
+      else if (uk.length) hlava.appendChild(el('span', 'hotovo-dne',
+        uk.filter(function (r) { return r.hotovo[tyden]; }).length + '/' + uk.length));
+      karta.appendChild(hlava);
+      g.radky.forEach(function (r) {
+        if (r.volno) { karta.appendChild(el('div', 'volno', '💤 Volno – dnes žádná čínština.')); return; }
+        var b = el('button', 'ukol' + (r.hotovo[tyden] ? ' hotovo' : ''));
+        b.appendChild(el('span', 'ikona', ikonaAktivity(r.aktivita)));
+        var txt = el('span', 'text');
+        var k = String(r.kdy).toLowerCase();
+        txt.appendChild(el('span', 'kdy' + (k.indexOf('ráno') >= 0 ? ' rano' : (k.indexOf('večer') >= 0 ? ' vecer' : '')), r.kdy));
+        txt.appendChild(el('div', 'nazev', r.aktivita));
+        b.appendChild(txt);
+        b.appendChild(el('span', 'cas', r.cas));
+        b.appendChild(el('span', 'policko'));
+        b.onclick = function () { prepni(r, b); };
+        karta.appendChild(b);
+        var druh = druhOdkazu(r.aktivita);
+        if (druh && od[druh]) {
+          var a = el('a', 'otevrit', 'Otevřít ' + { prezentace: 'prezentaci', dialog: 'dialog', tony: 'tóny', quizlet: 'Quizlet' }[druh] + ' ▸');
+          a.href = od[druh]; a.target = '_blank'; a.rel = 'noopener';
+          karta.appendChild(a);
+        }
+      });
+      s.appendChild(karta);
     });
   }
 
@@ -323,7 +449,7 @@
       stav = zMinula;
       tyden = vychoziTyden();
       vykresli();
-      document.getElementById('postupText').textContent += ' · aktualizuji…';
+      var ch = document.querySelector('.cesta-hlava span'); if (ch) ch.textContent += ' · aktualizuji…';
     }
     nacitam = true;
     api({ akce: 'stav' })
