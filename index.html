@@ -71,7 +71,6 @@
       <h1>Plán opakování čínštiny</h1>
       <p class="podtitul">Ťukni na úkol, když ho máš hotový.</p>
     </div>
-    <button class="zvuk" id="zvuk" aria-label="Zvuk zapnout / vypnout">🔊</button>
   </div>
   <div class="zprava" id="zprava"></div>
   <div class="tydny" id="tydny"></div>
@@ -174,17 +173,7 @@
   function nactiCache() { try { var v = localStorage.getItem(KLIC_STAV); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
 
   /* ---------- Oslavy: animace a zvuky (bez souborů navíc) ---------- */
-  var ZVUK_KLIC = 'planOpakovani.zvuk';
-  var zvukZap = true;
-  try { zvukZap = localStorage.getItem(ZVUK_KLIC) !== '0'; } catch (e) {}
-  var tlZvuk = document.getElementById('zvuk');
-  function ukazZvuk() { tlZvuk.textContent = zvukZap ? '🔊' : '🔇'; }
-  ukazZvuk();
-  tlZvuk.onclick = function () {
-    zvukZap = !zvukZap; ukazZvuk();
-    try { localStorage.setItem(ZVUK_KLIC, zvukZap ? '1' : '0'); } catch (e) {}
-    if (zvukZap) tony([[880, 0, .12]], 'sine', .15);
-  };
+  var zvukZap = true;               // zvuk jen u potlesku
   var malyPohyb = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var ac = null;
@@ -276,14 +265,13 @@
     var dne = ukolyTydne.filter(function (u) { return u.den === r.den; });
     var hotovoDen = dne.length > 1 && dne.every(function (u) { return u.hotovo[t]; });
     if (hotovoTyden) {
-      banner('🏆 Celý týden hotový!'); zvukFanfara(); zvukOhnostroj();
+      banner('🏆 Celý týden hotový!'); zvukPotlesk(2);
       if (!malyPohyb) ohnostroj();
     } else if (hotovoDen) {
       banner('🎉 ' + r.den.replace(/\s*\(.*\)/, '') + ' splněný!'); zvukPotlesk(1.4); emoji('👏', x, y);
       if (!malyPohyb) { pridej(innerWidth * .25, innerHeight * .35, 60, 9); pridej(innerWidth * .75, innerHeight * .35, 60, 9); }
     } else {
       var volba = Math.floor(Math.random() * 4);
-      zvukCink();
       if (volba === 0 && !malyPohyb) pridej(x, y, 35, 7);
       else if (volba === 1) { emoji('👏', x, y); zvukPotlesk(.5); }
       else emoji(['🎉', '⭐', '💪', '🌟', '🥳', '🔥'][Math.floor(Math.random() * 6)], x, y);
