@@ -132,9 +132,15 @@
     return stav.tydny - 1;
   }
 
-  function odkazyTydne() {
-    var o = (stav.odkazy || [])[tyden];
-    return (o && typeof o === 'object') ? o : {};       // starší uložený stav (jen text) ignorovat
+  function odkazyTydne() {                              // { prezentace: [url…], dialog: […], tony: […], quizlet: […], lekce }
+    var o = (stav.odkazy || [])[tyden], v = { prezentace: [], dialog: [], tony: [], quizlet: [] };
+    if (!o || typeof o !== 'object') return v;
+    ['prezentace', 'dialog', 'tony', 'quizlet'].forEach(function (k) {
+      var x = o[k];
+      v[k] = Array.isArray(x) ? x.filter(Boolean) : (x ? [x] : []);
+    });
+    v.lekce = o.lekce;
+    return v;
   }
 
   function druhOdkazu(aktivita) {                      // ke kterému úkolu patří který odkaz
@@ -194,10 +200,11 @@
     var ob = document.getElementById('odkazy');
     ob.innerHTML = '';
     [['prezentace', '📖', 'Prezentace'], ['dialog', '💬', 'Dialog'], ['tony', '🎧', 'Tóny'], ['quizlet', '🃏', 'Quizlet']].forEach(function (p) {
-      if (!od[p[0]]) return;
-      var a = el('a', ''); a.href = od[p[0]]; a.target = '_blank'; a.rel = 'noopener';
-      a.appendChild(el('b', '', p[1])); a.appendChild(el('span', '', p[2]));
+      od[p[0]].forEach(function (u, i, vse) {
+      var a = el('a', ''); a.href = u; a.target = '_blank'; a.rel = 'noopener';
+      a.appendChild(el('b', '', p[1])); a.appendChild(el('span', '', p[2] + (vse.length > 1 ? ' ' + (i + 1) : '')));
       ob.appendChild(a);
+      });
     });
 
     var celkem = ukoly().length;
@@ -217,7 +224,8 @@
     cesta.innerHTML = '';
     var h = hotovoVTydnu(tyden);
     var hl = el('div', 'cesta-hlava');
-    hl.innerHTML = '<span>Cesta ' + (tyden + 1) + '. týdnem</span><span>Hotovo <b>' + h + ' z ' + celkem + '</b>' +
+    hl.innerHTML = '<span>Cesta ' + (tyden + 1) + '. týdnem' + (od.lekce ? ' · lekce ' + od.lekce : '') +
+      '</span><span>Hotovo <b>' + h + ' z ' + celkem + '</b>' +
       (h === celkem && celkem ? ' 🏆' : '') + '</span>';
     cesta.appendChild(hl);
     var zast = el('div', 'zastavky');
@@ -268,11 +276,12 @@
         b.onclick = function () { prepni(r, b); };
         karta.appendChild(b);
         var druh = druhOdkazu(r.aktivita);
-        if (druh && od[druh]) {
-          var a = el('a', 'otevrit', 'Otevřít ' + { prezentace: 'prezentaci', dialog: 'dialog', tony: 'tóny', quizlet: 'Quizlet' }[druh] + ' ▸');
-          a.href = od[druh]; a.target = '_blank'; a.rel = 'noopener';
+        if (druh) od[druh].forEach(function (u, i, vse) {
+          var a = el('a', 'otevrit', 'Otevřít ' + { prezentace: 'prezentaci', dialog: 'dialog', tony: 'tóny', quizlet: 'Quizlet' }[druh] +
+                      (vse.length > 1 ? ' ' + (i + 1) : '') + ' ▸');
+          a.href = u; a.target = '_blank'; a.rel = 'noopener';
           karta.appendChild(a);
-        }
+        });
       });
       s.appendChild(karta);
     });
