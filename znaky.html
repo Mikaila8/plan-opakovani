@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Psaní znaků</title>
+<style>
+  :root { --bg: #f4f6f7; --karta: #ffffff; --text: #26323a; --slaby: #7b8790; --akcent: #e0614f;
+          --hotovo: #2fa37a; --cara: #dfe7ec; --tyden: #3b6f8f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { max-width: 480px; margin: 0 auto; padding: 18px 16px 40px; }
+  h1 { font-size: 24px; margin: 0 0 2px; }
+  .podtitul { color: var(--slaby); font-size: 14px; margin: 0 0 12px; }
+  .cipy { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .cipy button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--cara);
+                 background: var(--karta); font: 22px "KaiTi", "STKaiti", serif; color: var(--text); cursor: pointer; }
+  .cipy button.vybrany { border-color: var(--tyden); box-shadow: 0 0 0 2px var(--tyden); }
+  .cipy button.hotovo { background: #e3f4ec; border-color: var(--hotovo); }
+  .karta { background: var(--karta); border-radius: 18px; box-shadow: 0 2px 10px rgba(30,50,60,.10);
+           padding: 16px; text-align: center; }
+  .pinyin { font-size: 30px; font-weight: 600; margin: 0; }
+  .vyznam { color: var(--slaby); font-size: 15px; margin: 2px 0 10px; min-height: 21px; }
+  .vyznam b { font: 18px "KaiTi", "STKaiti", serif; color: var(--text); font-weight: normal; margin-right: 6px; }
+  #pole { width: 260px; height: 260px; margin: 0 auto; position: relative; touch-action: none; }
+  #pole svg.mrizka { position: absolute; inset: 0; pointer-events: none; }
+  #pole > svg:not(.mrizka) { position: relative; z-index: 1; }
+  #pole .nahrada { position: absolute; inset: 0; display: grid; place-items: center;
+                   font: 200px/1 "KaiTi", "STKaiti", serif; }
+  .zprava { min-height: 24px; font-weight: 700; margin: 8px 0 4px; color: var(--slaby); font-size: 15px; }
+  .zprava.ok { color: var(--hotovo); }
+  .tlacitka { display: flex; gap: 8px; margin-top: 8px; }
+  .tlacitka button { flex: 1; padding: 11px 4px; border-radius: 14px; border: none; font: inherit; font-weight: 700;
+                     font-size: 15px; cursor: pointer; background: #eef1f3; color: var(--text); }
+  .tlacitka button.hlavni { background: var(--tyden); color: #fff; }
+  .navigace { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .navigace button { padding: 9px 14px; border-radius: 12px; border: 1px solid var(--cara); background: var(--karta);
+                     font: inherit; font-weight: 700; color: var(--text); cursor: pointer; }
+  .navigace button:disabled { opacity: .35; cursor: default; }
+  .navigace span { color: var(--slaby); font-size: 14px; }
+  .tip { font-size: 13px; color: var(--slaby); text-align: center; margin-top: 14px; }
+  .chyba { padding: 12px 14px; border-radius: 12px; background: #fdecec; color: #8a2525; font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Psaní znaků</h1>
+  <p class="podtitul" id="podtitul"></p>
+  <div id="obsah">
+    <div class="cipy" id="cipy"></div>
+    <div class="karta">
+      <p class="pinyin" id="pinyin"></p>
+      <p class="vyznam" id="vyznam"></p>
+      <div id="pole">
+        <svg class="mrizka" viewBox="0 0 260 260" aria-hidden="true">
+          <rect x="1" y="1" width="258" height="258" fill="none" stroke="#c9d2d8" stroke-width="2"/>
+          <g stroke="#dfe5e9" stroke-width="1.2" stroke-dasharray="5 5">
+            <line x1="0" y1="130" x2="260" y2="130"/><line x1="130" y1="0" x2="130" y2="260"/>
+            <line x1="0" y1="0" x2="260" y2="260"/><line x1="260" y1="0" x2="0" y2="260"/>
+          </g>
+        </svg>
+      </div>
+      <div class="zprava" id="zprava"></div>
+      <div class="tlacitka">
+        <button id="animace" class="hlavni">▶ Animace</button>
+        <button id="napis">✍️ Napiš sám</button>
+      </div>
+    </div>
+    <div class="navigace">
+      <button id="predchozi">◀ Předchozí</button>
+      <span id="pocitadlo"></span>
+      <button id="dalsi">Další ▶</button>
+    </div>
+    <p class="tip">Nejdřív si pusť animaci, pak znak napiš prstem. Pak ho napiš na papír: 2× podle vzoru, 3× zpaměti.</p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.3/dist/hanzi-writer.min.js"></script>
+<script>
+  // Data přicházejí v odkazu ze stránky Plán opakování: ?l=10&d=[{"z":"吃","p":"chī","s":"吃","c":"jíst"}, …]
+  var param = new URLSearchParams(location.search);
+  var lekce = param.get('l') || '';
+  var znaky = [];
+  try { znaky = JSON.parse(param.get('d') || '[]'); } catch (e) { znaky = []; }
+  znaky = znaky.filter(function (z) { return z && z.z; });
+
+  // Barvy tónů jako v ostatních materiálech (1 zelená, 2 modrá, 3 hnědá, 4 červená, neutrální šedá)
+  var BARVY_TONU = { 1: '#1f8c3b', 2: '#1f5fbf', 3: '#8c592b', 4: '#dd6e5f', 5: '#8a8a8a' };
+  function ton(p) {
+    var d = String(p || '').normalize('NFD');
+    if (d.indexOf('̄') >= 0) return 1;
+    if (d.indexOf('́') >= 0) return 2;
+    if (d.indexOf('̌') >= 0) return 3;
+    if (d.indexOf('̀') >= 0) return 4;
+    return 5;
+  }
+
+  var KLIC = 'psaniZnaku.hotovo.' + lekce;              // které znaky už student napsal (jen v tomto telefonu)
+  var hotove = {};
+  try { hotove = JSON.parse(localStorage.getItem(KLIC) || '{}') || {}; } catch (e) { hotove = {}; }
+  function ulozHotove() { try { localStorage.setItem(KLIC, JSON.stringify(hotove)); } catch (e) {} }
+
+  var index = 0, pisar = null, bezDat = false;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function zprava(text, ok) { var z = $('zprava'); z.textContent = text || ''; z.className = 'zprava' + (ok ? ' ok' : ''); }
+
+  function cipy() {
+    var c = $('cipy'); c.innerHTML = '';
+    znaky.forEach(function (z, i) {
+      var b = document.createElement('button');
+      b.textContent = z.z;
+      b.className = (i === index ? 'vybrany ' : '') + (hotove[z.z] ? 'hotovo' : '');
+      b.setAttribute('aria-label', z.z + ' ' + (z.p || ''));
+      b.onclick = function () { ukaz(i); };
+      c.appendChild(b);
+    });
+  }
+
+  function ukaz(i) {
+    index = i;
+    var z = znaky[i];
+    var p = $('pinyin'); p.textContent = z.p || ''; p.style.color = BARVY_TONU[ton(z.p)];
+    var v = $('vyznam'); v.innerHTML = '';
+    if (z.s && z.s !== z.z) { var b = document.createElement('b'); b.textContent = z.s; v.appendChild(b); }
+    v.appendChild(document.createTextNode(z.c || ''));
+    $('pocitadlo').textContent = (i + 1) + ' / ' + znaky.length;
+    $('predchozi').disabled = i === 0;
+    $('dalsi').disabled = i === znaky.length - 1;
+    zprava('');
+    cipy();
+
+    var pole = $('pole');
+    Array.prototype.slice.call(pole.children).forEach(function (n) {   // smazat předchozí znak, mřížku nechat
+      if (!n.classList.contains('mrizka')) n.remove();
+    });
+    bezDat = false;
+    if (!window.HanziWriter) { nahrada(z.z, 'Animace se nenačetly – zkontroluj internet.'); return; }
+    pisar = HanziWriter.create('pole', z.z, {
+      width: 260, height: 260, padding: 14,
+      showOutline: true, strokeColor: '#26323a', outlineColor: '#e4e9ec',
+      radicalColor: null, highlightColor: '#3b6f8f', drawingColor: '#3b6f8f',
+      strokeAnimationSpeed: 1, delayBetweenStrokes: 250,
+      onLoadCharDataError: function () { nahrada(z.z, 'Pro tento znak animace není – podívej se na vzor.'); }
+    });
+    setTimeout(function () { if (pisar && !bezDat) pisar.animateCharacter(); }, 300);
+  }
+
+  function nahrada(znak, text) {
+    bezDat = true; pisar = null;
+    var d = document.createElement('div'); d.className = 'nahrada'; d.textContent = znak;
+    $('pole').appendChild(d);
+    zprava(text);
+  }
+
+  $('animace').onclick = function () {
+    if (!pisar || bezDat) return;
+    zprava('');
+    pisar.showCharacter(); pisar.animateCharacter();
+  };
+
+  $('napis').onclick = function () {
+    if (!pisar || bezDat) return;
+    var z = znaky[index];
+    zprava('Piš tahy ve správném pořadí.');
+    pisar.quiz({
+      showHintAfterMisses: 2,
+      highlightOnComplete: true,
+      onMistake: function () { zprava('Zkus to znovu – po 2 chybách ukážu nápovědu.'); },
+      onCorrectStroke: function (d) { zprava('Tah ' + (d.strokeNum + 1) + ' / ' + (d.strokeNum + 1 + d.strokesRemaining)); },
+      onComplete: function (d) {
+        zprava(d.totalMistakes === 0 ? 'Výborně, bez chyby! 🎉' : 'Hotovo! 👍 (chyb: ' + d.totalMistakes + ')', true);
+        hotove[z.z] = true; ulozHotove(); cipy();
+      }
+    });
+  };
+
+  $('predchozi').onclick = function () { if (index > 0) ukaz(index - 1); };
+  $('dalsi').onclick = function () { if (index < znaky.length - 1) ukaz(index + 1); };
+
+  $('podtitul').textContent = lekce ? 'Lekce ' + lekce + ' · ' + znaky.length + ' znaků' : znaky.length + ' znaků';
+  if (!znaky.length) {
+    $('obsah').innerHTML = '<div class="chyba">Pro tuto lekci zatím nejsou znaky. Otevři stránku z Plánu opakování.</div>';
+  } else {
+    ukaz(0);
+  }
+</script>
+</body>
+</html>
