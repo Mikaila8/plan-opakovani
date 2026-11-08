@@ -155,11 +155,13 @@
   }
 
   var ANKI_ODKAZ = 'https://ankiweb.net/decks';      // Anki v prohlížeči – student musí být přihlášený
-  // Android: otevře aplikaci AnkiDroid (když ji nemá, AnkiWeb); iPhone a počítač: AnkiWeb v prohlížeči
+  // Android: otevře aplikaci AnkiDroid (když ji nemá, AnkiWeb); iPhone a počítač: AnkiWeb v prohlížeči.
+  // AnkiDroid z webu dovolí otevřít jen prohlížeč kartiček (anki://x-callback-url/browser) –
+  // šipkou zpět se student dostane na seznam balíčků.
   function ankiOdkaz() {
     if (/android/i.test(navigator.userAgent)) {
-      return 'intent://#Intent;package=com.ichi2.anki;S.browser_fallback_url=' +
-             encodeURIComponent(ANKI_ODKAZ) + ';end';
+      return 'intent://x-callback-url/browser#Intent;scheme=anki;package=com.ichi2.anki;' +
+             'S.browser_fallback_url=' + encodeURIComponent(ANKI_ODKAZ) + ';end';
     }
     return ANKI_ODKAZ;
   }
