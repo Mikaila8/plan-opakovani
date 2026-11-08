@@ -141,6 +141,7 @@
       v[k] = Array.isArray(x) ? x.filter(Boolean) : (x ? [x] : []);
     });
     v.lekce = o.lekce;
+    v.znaky = Array.isArray(o.znaky) ? o.znaky : [];   // znaky lekce na psaní (skript PSANI_ZNAKU.bat)
     return v;
   }
 
@@ -286,6 +287,13 @@
           a.href = u; a.target = '_blank'; a.rel = 'noopener';
           karta.appendChild(a);
         });
+        if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
+          var az = el('a', 'otevrit', 'Otevřít animace znaků ▸');
+          az.href = 'znaky.html?l=' + encodeURIComponent(od.lekce || '') +
+                    '&d=' + encodeURIComponent(JSON.stringify(od.znaky));
+          az.target = '_blank'; az.rel = 'noopener';
+          karta.appendChild(az);
+        }
       });
       s.appendChild(karta);
     });
