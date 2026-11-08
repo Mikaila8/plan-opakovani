@@ -154,7 +154,15 @@
     return '';
   }
 
-  var ANKI_ODKAZ = 'https://ankiweb.net/decks';      // Anki v prohlížeči – student musí být v Safari přihlášený
+  var ANKI_ODKAZ = 'https://ankiweb.net/decks';      // Anki v prohlížeči – student musí být přihlášený
+  // Android: otevře aplikaci AnkiDroid (když ji nemá, AnkiWeb); iPhone a počítač: AnkiWeb v prohlížeči
+  function ankiOdkaz() {
+    if (/android/i.test(navigator.userAgent)) {
+      return 'intent://#Intent;package=com.ichi2.anki;S.browser_fallback_url=' +
+             encodeURIComponent(ANKI_ODKAZ) + ';end';
+    }
+    return ANKI_ODKAZ;
+  }
   var BARVY_TYDNU = ['#3b6f8f'];                       // jedna klidná barva pro vybraný týden a cestu
   var SVETLE_TYDNU = ['#e6eef3'];
   var BARVY_DNU = ['#f3f6f8'];                          // všechna záhlaví dnů stejně jemně šedá
@@ -290,7 +298,7 @@
         });
         if (/anki/i.test(r.aktivita)) {                         // Anki ve webovém prohlížeči (AnkiWeb)
           var aa = el('a', 'otevrit', 'Otevřít Anki ▸');
-          aa.href = ANKI_ODKAZ; aa.target = '_blank'; aa.rel = 'noopener';
+          aa.href = ankiOdkaz(); aa.target = '_blank'; aa.rel = 'noopener';
           karta.appendChild(aa);
         }
         if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
