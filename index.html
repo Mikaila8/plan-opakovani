@@ -154,6 +154,7 @@
     return '';
   }
 
+  var ANKI_ODKAZ = 'https://ankiweb.net/decks';      // Anki v prohlížeči – student musí být v Safari přihlášený
   var BARVY_TYDNU = ['#3b6f8f'];                       // jedna klidná barva pro vybraný týden a cestu
   var SVETLE_TYDNU = ['#e6eef3'];
   var BARVY_DNU = ['#f3f6f8'];                          // všechna záhlaví dnů stejně jemně šedá
@@ -287,6 +288,11 @@
           a.href = u; a.target = '_blank'; a.rel = 'noopener';
           karta.appendChild(a);
         });
+        if (/anki/i.test(r.aktivita)) {                         // Anki ve webovém prohlížeči (AnkiWeb)
+          var aa = el('a', 'otevrit', 'Otevřít Anki ▸');
+          aa.href = ANKI_ODKAZ; aa.target = '_blank'; aa.rel = 'noopener';
+          karta.appendChild(aa);
+        }
         if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
           var az = el('a', 'otevrit', 'Otevřít animace znaků ▸');
           az.href = 'znaky.html?l=' + encodeURIComponent(od.lekce || '') +
