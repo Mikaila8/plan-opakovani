@@ -6,8 +6,9 @@
 <title>Plán opakování</title>
 <style>
   :root {
-    --bg: #f4f6f7; --karta: #ffffff; --text: #26323a; --slaby: #7b8790;
-    --akcent: #e0614f; --hotovo: #2fa37a; --cara: #dfe7ec; --tyden: #f4b942; --tyden-svetla: #fdf3dc;
+    --bg: #f3f4f8; --karta: #ffffff; --text: #232a3d; --slaby: #737b8c;
+    --akcent: #1c2a4d; --hotovo: #2fa37a; --cara: #e3e6ee; --tyden: #2a3150; --tyden-svetla: #e6e9f2;
+    --hlava: linear-gradient(100deg, #0d1b3a 0%, #17305f 55%, #0a1226 100%);
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
@@ -24,8 +25,8 @@
               box-shadow: 0 1px 3px rgba(30,50,60,.12); }
   .odkazy a b { font-size: 20px; line-height: 1.1; }
   .tydny { display: flex; gap: 6px; margin-bottom: 14px; }
-  .tydny button { flex: 1; padding: 9px 0 7px; border: 1px solid var(--cara); border-radius: 14px; font: inherit;
-                  font-weight: 700; font-size: 14px; cursor: pointer; color: var(--text); background: var(--karta); }
+  .tydny button { flex: 1; padding: 9px 0 7px; border: 0; border-radius: 14px; font: inherit;
+                  font-weight: 700; font-size: 14px; cursor: pointer; color: var(--text); background: #e6e8ee; }
   .tydny button.vybrany { background: var(--tyden); border-color: var(--tyden); color: #fff;
                           box-shadow: 0 3px 8px rgba(30,50,60,.18); }
   .tydny button small { display: block; font-weight: 500; font-size: 11px; opacity: .95; }
@@ -49,19 +50,19 @@
   .karta-dne { background: var(--karta); border-radius: 18px; margin-bottom: 14px; overflow: hidden;
                box-shadow: 0 1px 3px rgba(30,50,60,.10); }
   .karta-dne.dnes { box-shadow: 0 0 0 2px var(--akcent), 0 4px 14px rgba(30,50,60,.12); }
-  .hlava-dne { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px;
-               font-weight: 800; font-size: 17px; border-bottom: 1px solid var(--cara); }
-  .hlava-dne .stitek { font-size: 12px; font-weight: 700; background: var(--akcent); color: #fff;
+  .hlava-dne { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
+               font-weight: 800; font-size: 17px; background: var(--hlava); color: #fff; }
+  .hlava-dne .stitek { font-size: 12px; font-weight: 700; background: #f4b942; color: #1c2a4d;
                        border-radius: 999px; padding: 3px 10px; }
-  .hlava-dne .hotovo-dne { font-size: 13px; font-weight: 600; color: var(--slaby); }
+  .hlava-dne .hotovo-dne { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.75); }
   .ukol { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none;
           padding: 12px 14px; border: 0; border-top: 1px solid var(--cara); font: inherit; color: var(--text); cursor: pointer; }
   .ukol .ikona { flex: none; font-size: 20px; width: 26px; text-align: center; }
   .ukol .text { flex: 1; min-width: 0; }
   .ukol .kdy { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 7px;
                margin-bottom: 2px; background: #eef1f3; color: var(--slaby); text-transform: uppercase; letter-spacing: .04em; }
-  .ukol .kdy.rano { background: #fff1cc; color: #9a6b00; }
-  .ukol .kdy.vecer { background: #e3e6fa; color: #4a4f9c; }
+  .ukol .kdy.rano { background: #fdeab3; color: #8a5a00; }
+  .ukol .kdy.vecer { background: #e4e6f2; color: #474e78; }
   .ukol .nazev { font-weight: 600; }
   .ukol .cas { flex: none; font-size: 13px; color: var(--slaby); }
   .ukol .policko { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #c5d0d6;
@@ -71,7 +72,7 @@
   .ukol.hotovo .policko::after { content: "✓"; }
   @keyframes fajfka { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
   .otevrit { display: block; text-align: right; text-decoration: none; font-size: 13px; font-weight: 700;
-             color: var(--akcent); padding: 0 14px 10px; margin-top: -4px; }
+             color: var(--text); padding: 0 14px 10px; margin-top: -4px; }
   .volno { padding: 14px; color: var(--slaby); font-size: 15px; border-top: 1px solid var(--cara); }
   .zprava { padding: 12px 14px; border-radius: 12px; background: #fdecec; color: #8a2525;
             font-size: 14px; margin-bottom: 12px; display: none; }
@@ -165,8 +166,8 @@
     }
     return ANKI_ODKAZ;
   }
-  var BARVY_TYDNU = ['#3b6f8f'];                       // jedna klidná barva pro vybraný týden a cestu
-  var SVETLE_TYDNU = ['#e6eef3'];
+  var BARVY_TYDNU = ['#2a3150'];                       // jedna klidná barva pro vybraný týden a cestu
+  var SVETLE_TYDNU = ['#e6e9f2'];
   var BARVY_DNU = ['#f3f6f8'];                          // všechna záhlaví dnů stejně jemně šedá
 
   function el(tag, trida, text) { var e = document.createElement(tag); if (trida) e.className = trida; if (text !== undefined) e.textContent = text; return e; }
@@ -206,7 +207,7 @@
     document.documentElement.style.setProperty('--tyden', barva);
     document.documentElement.style.setProperty('--tyden-svetla', SVETLE_TYDNU[tyden % SVETLE_TYDNU.length]);
     var hod = new Date().getHours();
-    document.getElementById('pozdrav').textContent = hod < 11 ? 'Dobré ráno! ☀️ Skvělý start do dne.' :
+    document.getElementById('pozdrav').textContent = hod < 11 ? 'Dobré ráno! 🌟 Skvělý start do dne.' :
       (hod < 18 ? 'Hezký den! 🌤️' : 'Hezký večer! 🌙');
 
     var od = odkazyTydne();
@@ -305,7 +306,7 @@
         }
         if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
           var az = el('a', 'otevrit', 'Otevřít animace znaků ▸');
-          az.href = 'znaky.html?l=' + encodeURIComponent(od.lekce || '') +
+          az.href = 'znaky-test.html?l=' + encodeURIComponent(od.lekce || '') +
                     '&d=' + encodeURIComponent(JSON.stringify(od.znaky));
           az.target = '_blank'; az.rel = 'noopener';
           karta.appendChild(az);
