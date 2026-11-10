@@ -306,7 +306,7 @@
         }
         if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
           var az = el('a', 'otevrit', 'Otevřít animace znaků ▸');
-          az.href = 'znaky-test.html?l=' + encodeURIComponent(od.lekce || '') +
+          az.href = 'znaky.html?l=' + encodeURIComponent(od.lekce || '') +
                     '&d=' + encodeURIComponent(JSON.stringify(od.znaky));
           az.target = '_blank'; az.rel = 'noopener';
           karta.appendChild(az);
