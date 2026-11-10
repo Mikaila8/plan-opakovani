@@ -272,7 +272,7 @@
       var dnes = jeDnes(g.den);
       var karta = el('div', 'karta-dne' + (dnes ? ' dnes' : ''));
       var hlava = el('div', 'hlava-dne');
-      hlava.style.background = BARVY_DNU[i % BARVY_DNU.length];
+      // barvu zahlavi dne dava styl (.hlava-dne, --hlava)
       hlava.appendChild(el('span', '', g.den));
       var uk = g.radky.filter(function (r) { return !r.volno; });
       if (dnes) hlava.appendChild(el('span', 'stitek', 'dnes'));
