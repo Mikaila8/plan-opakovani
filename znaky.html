@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Psaní znaků</title>
 <style>
-  :root { --bg: #f3f4f8; --karta: #ffffff; --text: #232a3d; --slaby: #737b8c; --akcent: #1c2a4d;
-          --hotovo: #2fa37a; --cara: #e3e6ee; --tyden: #2a3150; }
+  :root { --bg: #f3f4f8; --karta: #ffffff; --text: #232a3d; --slaby: #737b8c; --akcent: #2f4a82;
+          --hotovo: #2fa37a; --cara: #e3e6ee; --tyden: #2f4a82; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
          font: 16px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -16,7 +16,7 @@
   .cipy { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
   .cipy button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--cara);
                  background: var(--karta); font: 22px "KaiTi", "STKaiti", serif; color: var(--text); cursor: pointer; }
-  .cipy button.vybrany { background: var(--tyden); border-color: var(--tyden); color: #fff; }
+  .cipy button.vybrany { border: 3px solid var(--tyden); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--tyden); }
   .cipy button.hotovo { background: #e3f4ec; border-color: var(--hotovo); }
   .karta { background: var(--karta); border-radius: 18px; box-shadow: 0 2px 10px rgba(30,50,60,.10);
            padding: 16px; text-align: center; }
@@ -140,7 +140,7 @@
     pisar = HanziWriter.create('pole', z.z, {
       width: 260, height: 260, padding: 14,
       showOutline: true, strokeColor: '#232a3d', outlineColor: '#e4e9ec',
-      radicalColor: null, highlightColor: '#2a3150', drawingColor: '#2a3150',
+      radicalColor: null, highlightColor: '#2f4a82', drawingColor: '#2f4a82',
       strokeAnimationSpeed: 1, delayBetweenStrokes: 250,
       onLoadCharDataError: function () { nahrada(z.z, 'Pro tento znak animace není – podívej se na vzor.'); }
     });
