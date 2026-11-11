@@ -14,12 +14,23 @@
   h1 { font-size: 24px; margin: 0 0 2px; }
   .podtitul { color: var(--slaby); font-size: 14px; margin: 0 0 12px; }
   .cipy { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .cipy button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--cara);
-                 background: var(--karta); font: 22px "KaiTi", "STKaiti", serif; color: var(--text); cursor: pointer; }
-  .cipy button.vybrany { border: 3px solid var(--tyden); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--tyden); }
-  .cipy button.hotovo { background: #e3f4ec; border-color: var(--hotovo); }
+  .cipy button { position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--cara);
+                 background: var(--karta); font: 22px "KaiTi", "STKaiti", serif; color: var(--text) !important;
+                 -webkit-text-fill-color: var(--text); opacity: 1; cursor: pointer; padding: 0;
+                 box-shadow: 0 1px 3px rgba(30,50,60,.08); }
+  .cipy button.vybrany { border: 3px solid var(--tyden); background: #e8eef9; transform: translateY(-2px);
+                        box-shadow: 0 4px 10px rgba(47,74,130,.25); }
+  .cipy button.hotovo { border-color: var(--hotovo); }
+  .cipy button.hotovo::after { content: "✓"; position: absolute; top: -6px; right: -6px; width: 16px; height: 16px;
+                              border-radius: 50%; background: var(--hotovo); color: #fff; -webkit-text-fill-color: #fff;
+                              font: 700 10px/16px Arial, sans-serif; }
+  .cipy button.vybrany.hotovo { border-color: var(--tyden); }
   .karta { background: var(--karta); border-radius: 18px; box-shadow: 0 2px 10px rgba(30,50,60,.10);
-           padding: 16px; text-align: center; }
+           padding: 0 16px 16px; text-align: center; overflow: hidden; }
+  .karta-hlava { margin: 0 -16px 14px; padding: 10px 16px; display: flex; justify-content: space-between;
+                 background: linear-gradient(100deg, #1a2f5c 0%, #2b4c8c 55%, #15244a 100%); color: #fff;
+                 font-weight: 800; font-size: 15px; }
+  .karta-hlava span { font-weight: 600; font-size: 13px; color: rgba(255,255,255,.8); }
   .pinyin { font-size: 30px; font-weight: 600; margin: 0; }
   .vyznam { color: var(--slaby); font-size: 15px; margin: 2px 0 10px; min-height: 21px; }
   .vyznam b { font: 18px "KaiTi", "STKaiti", serif; color: var(--text); font-weight: normal; margin-right: 6px; }
@@ -31,12 +42,12 @@
   .zprava { min-height: 24px; font-weight: 700; margin: 8px 0 4px; color: var(--slaby); font-size: 15px; }
   .zprava.ok { color: var(--hotovo); }
   .tlacitka { display: flex; gap: 8px; margin-top: 8px; }
-  .tlacitka button { flex: 1; padding: 11px 4px; border-radius: 14px; border: 2px solid var(--tyden); font: inherit; font-weight: 700;
-                     font-size: 15px; cursor: pointer; background: #fff; color: var(--text); }
+  .tlacitka button { flex: 1; padding: 10px 4px; border-radius: 999px; border: 1.5px solid var(--tyden); font: inherit; font-weight: 700;
+                     font-size: 15px; cursor: pointer; background: #fff; color: var(--tyden); }
   .tlacitka button.hlavni { background: var(--tyden); color: #fff; }
   .navigace { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
-  .navigace button { padding: 9px 14px; border-radius: 12px; border: 1px solid var(--cara); background: var(--karta);
-                     font: inherit; font-weight: 700; color: var(--text); cursor: pointer; }
+  .navigace button { padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--tyden); background: var(--karta);
+                     font: inherit; font-weight: 700; color: var(--tyden); cursor: pointer; }
   .navigace button:disabled { opacity: .35; cursor: default; }
   .navigace span { color: var(--slaby); font-size: 14px; }
   .tip { font-size: 13px; color: var(--slaby); text-align: center; margin-top: 14px; }
@@ -50,6 +61,7 @@
   <div id="obsah">
     <div class="cipy" id="cipy"></div>
     <div class="karta">
+      <div class="karta-hlava">Znak <span id="hlavaPocet"></span></div>
       <p class="pinyin" id="pinyin"></p>
       <p class="vyznam" id="vyznam"></p>
       <div id="pole">
@@ -126,6 +138,8 @@
     if (z.s && z.s !== z.z) { var b = document.createElement('b'); b.textContent = z.s; v.appendChild(b); }
     v.appendChild(document.createTextNode(z.c || ''));
     $('pocitadlo').textContent = (i + 1) + ' / ' + znaky.length;
+    var hotovo = znaky.filter(function (x) { return hotove[x.z]; }).length;
+    $('hlavaPocet').textContent = 'napsáno ' + hotovo + ' z ' + znaky.length;
     $('predchozi').disabled = i === 0;
     $('dalsi').disabled = i === znaky.length - 1;
     zprava('');
@@ -172,6 +186,7 @@
       onComplete: function (d) {
         zprava(d.totalMistakes === 0 ? 'Výborně, bez chyby! 🎉' : 'Hotovo! 👍 (chyb: ' + d.totalMistakes + ')', true);
         hotove[z.z] = true; ulozHotove(); cipy();
+        $('hlavaPocet').textContent = 'napsáno ' + znaky.filter(function (x) { return hotove[x.z]; }).length + ' z ' + znaky.length;
       }
     });
   };
