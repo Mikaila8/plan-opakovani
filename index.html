@@ -30,13 +30,16 @@
   .tydny button.vybrany { background: var(--tyden); border-color: var(--tyden); color: #fff;
                           box-shadow: 0 3px 8px rgba(30,50,60,.18); }
   .tydny button small { display: block; font-weight: 500; font-size: 11px; opacity: .95; }
-  .cesta { padding: 2px 4px 0; margin-bottom: 14px; }
+  .cesta { background: var(--karta); border-radius: 16px; padding: 10px 12px 8px; margin-bottom: 14px;
+           box-shadow: 0 1px 3px rgba(30,50,60,.08); }
   .cesta-hlava { display: flex; justify-content: space-between; font-size: 12px; color: var(--slaby); margin-bottom: 6px; }
-  .cesta-hlava b { color: var(--text); }
+  .cesta-hlava { align-items: baseline; }
+  .cesta-hlava b { color: var(--tyden); font-size: 22px; font-weight: 800; }
+  .cesta-hlava small { font-size: 13px; color: var(--slaby); }
   .zastavky { position: relative; display: flex; justify-content: space-between; }
-  .zastavky::before { content: ""; position: absolute; left: 7px; right: 7px; top: 6px; height: 2px;
+  .zastavky::before { content: ""; position: absolute; left: 7px; right: 7px; top: 5px; height: 4px;
                       background: #d3dde3; border-radius: 1px; }
-  .zastavky .ujeto { position: absolute; left: 7px; top: 6px; height: 2px; border-radius: 1px;
+  .zastavky .ujeto { position: absolute; left: 7px; top: 5px; height: 4px; border-radius: 2px;
                      background: var(--tyden); transition: width .4s; }
   .zastavka { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
               color: var(--slaby); width: 14px; }
@@ -58,7 +61,8 @@
   .hlava-dne .hotovo-dne { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.75); }
   .ukol { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none;
           padding: 12px 14px; border: 0; border-top: 1px solid var(--cara); font: inherit; color: var(--text); cursor: pointer; }
-  .ukol .ikona { flex: none; font-size: 20px; width: 26px; text-align: center; }
+  .ukol .ikona { flex: none; font-size: 20px; width: 40px; height: 40px; border-radius: 12px; display: grid;
+                 place-items: center; background: var(--ikona-bg, #eef1f6); }
   .ukol .text { flex: 1; min-width: 0; }
   .ukol .kdy { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 7px;
                margin-bottom: 2px; background: #eef1f3; color: var(--slaby); text-transform: uppercase; letter-spacing: .04em; }
@@ -68,12 +72,19 @@
   .ukol .cas { flex: none; font-size: 13px; color: var(--slaby); }
   .ukol .policko { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #c5d0d6;
                    display: grid; place-items: center; font-size: 17px; color: #fff; }
-  .ukol.hotovo .nazev { color: var(--slaby); }
+  .ukol.hotovo .nazev { color: #9aa1ae; text-decoration: line-through; }
+  .ukol.hotovo .ikona, .ukol.hotovo .kdy { opacity: .55; }
   .ukol.hotovo .policko { background: var(--hotovo); border-color: var(--hotovo); animation: fajfka .35s ease-out; }
   .ukol.hotovo .policko::after { content: "✓"; }
   @keyframes fajfka { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
-  .otevrit { display: block; text-align: right; text-decoration: none; font-size: 13px; font-weight: 700;
-             color: var(--text); padding: 0 14px 10px; margin-top: -4px; }
+  .otevrit-radek { text-align: right; padding: 0 14px 10px; margin-top: -4px; }
+  .otevrit { display: inline-block; text-decoration: none; font-size: 13px; font-weight: 700; color: var(--tyden);
+             border: 1.5px solid var(--tyden); border-radius: 999px; padding: 5px 13px; margin-left: 6px; }
+  .otevrit:active { background: var(--tyden-svetla); }
+  .karta-dne.sbaleno .hlava-dne { background: var(--karta); color: var(--text); }
+  .karta-dne.sbaleno { opacity: .8; }
+  .karta-dne.sbaleno .hotovo-dne { color: var(--hotovo); }
+  .hlava-dne.klik { cursor: pointer; }
   .volno { padding: 14px; color: var(--slaby); font-size: 15px; border-top: 1px solid var(--cara); }
   .zprava { padding: 12px 14px; border-radius: 12px; background: #fdecec; color: #8a2525;
             font-size: 14px; margin-bottom: 12px; display: none; }
@@ -180,6 +191,16 @@
     if (k.indexOf('hodin') >= 0) return '🏫';
     return '•';
   }
+  var rozbaleno = {};                                   // hotové dny, které si student rozbalil („týden|den“)
+  function pozadiIkony(akt) {                           // jemná barva čtverečku pod ikonou podle aktivity
+    var a = String(akt).toLowerCase();
+    if (a.indexOf('anki') >= 0) return '#fbeaf0';
+    if (a.indexOf('quizlet') >= 0) return '#eeedfe';
+    if (a.indexOf('psaní') >= 0) return '#fdf1d6';
+    if (a.indexOf('prezentace') >= 0 || a.indexOf('dialog') >= 0) return '#e6f1fb';
+    if (a.indexOf('tóny') >= 0) return '#e1f5ee';
+    return '#eef1f6';
+  }
   function ikonaAktivity(akt) {
     var a = String(akt).toLowerCase();
     if (a.indexOf('tóny') >= 0) return '🎧';
@@ -245,7 +266,7 @@
     var h = hotovoVTydnu(tyden);
     var hl = el('div', 'cesta-hlava');
     hl.innerHTML = '<span>Cesta ' + (tyden + 1) + '. týdnem' + (od.lekce ? ' · lekce ' + od.lekce : '') +
-      '</span><span>Hotovo <b>' + h + ' z ' + celkem + '</b>' +
+      '</span><span><b>' + h + '</b> <small>z ' + celkem + '</small>' +
       (h === celkem && celkem ? ' 🏆' : '') + '</span>';
     cesta.appendChild(hl);
     var zast = el('div', 'zastavky');
@@ -273,19 +294,30 @@
     s.innerHTML = '';
     skupiny.forEach(function (g, i) {
       var dnes = jeDnes(g.den);
-      var karta = el('div', 'karta-dne' + (dnes ? ' dnes' : ''));
-      var hlava = el('div', 'hlava-dne');
-      // barvu zahlavi dne dava styl (.hlava-dne, --hlava)
-      hlava.appendChild(el('span', '', g.den));
       var uk = g.radky.filter(function (r) { return !r.volno; });
+      var hotovych = uk.filter(function (r) { return r.hotovo[tyden]; }).length;
+      var klicDne = tyden + '|' + g.den;
+      var celyHotovy = uk.length > 0 && hotovych === uk.length;
+      var sbaleno = celyHotovy && !dnes && !rozbaleno[klicDne];     // hotový den se sbalí do jednoho řádku
+      var karta = el('div', 'karta-dne' + (dnes ? ' dnes' : '') + (sbaleno ? ' sbaleno' : ''));
+      var hlava = el('div', 'hlava-dne' + (celyHotovy && !dnes ? ' klik' : ''));
+      // barvu zahlavi dne dava styl (.hlava-dne, --hlava)
+      hlava.appendChild(el('span', '', (celyHotovy ? '✓ ' : '') + g.den));
       if (dnes) hlava.appendChild(el('span', 'stitek', 'dnes'));
       else if (uk.length) hlava.appendChild(el('span', 'hotovo-dne',
-        uk.filter(function (r) { return r.hotovo[tyden]; }).length + '/' + uk.length));
+        hotovych + '/' + uk.length + (celyHotovy ? (sbaleno ? ' hotovo ▾' : ' hotovo ▴') : '')));
+      if (celyHotovy && !dnes) hlava.onclick = function () {
+        if (rozbaleno[klicDne]) delete rozbaleno[klicDne]; else rozbaleno[klicDne] = true;
+        vykresli();
+      };
       karta.appendChild(hlava);
+      if (sbaleno) { s.appendChild(karta); return; }
       g.radky.forEach(function (r) {
         if (r.volno) { karta.appendChild(el('div', 'volno', '💤 Volno – dnes žádná čínština.')); return; }
         var b = el('button', 'ukol' + (r.hotovo[tyden] ? ' hotovo' : ''));
-        b.appendChild(el('span', 'ikona', ikonaAktivity(r.aktivita)));
+        var ik = el('span', 'ikona', ikonaAktivity(r.aktivita));
+        ik.style.setProperty('--ikona-bg', pozadiIkony(r.aktivita));
+        b.appendChild(ik);
         var txt = el('span', 'text');
         var k = String(r.kdy).toLowerCase();
         txt.appendChild(el('span', 'kdy' + (k.indexOf('ráno') >= 0 ? ' rano' : (k.indexOf('večer') >= 0 ? ' vecer' : '')), r.kdy));
@@ -293,27 +325,29 @@
         b.appendChild(txt);
         b.appendChild(el('span', 'cas', r.cas));
         b.appendChild(el('span', 'policko'));
-        b.onclick = function () { prepni(r, b); };
+        b.onclick = function () { rozbaleno[klicDne] = true; prepni(r, b); };   // den, který student právě dokončil, zůstane rozbalený
         karta.appendChild(b);
+        var radekOdkazu = el('div', 'otevrit-radek');
         var druh = druhOdkazu(r.aktivita);
         if (druh) od[druh].forEach(function (u, i, vse) {
           var a = el('a', 'otevrit', 'Otevřít ' + { prezentace: 'prezentaci', dialog: 'dialog', tony: 'tóny', quizlet: 'Quizlet' }[druh] +
                       (vse.length > 1 ? ' ' + (i + 1) : '') + ' ▸');
           a.href = u; a.target = '_blank'; a.rel = 'noopener';
-          karta.appendChild(a);
+          radekOdkazu.appendChild(a);
         });
         if (/anki/i.test(r.aktivita)) {                         // Anki ve webovém prohlížeči (AnkiWeb)
           var aa = el('a', 'otevrit', 'Otevřít Anki ▸');
           aa.href = ankiOdkaz(); aa.target = '_blank'; aa.rel = 'noopener';
-          karta.appendChild(aa);
+          radekOdkazu.appendChild(aa);
         }
         if (/psaní|znak/i.test(r.aktivita) && od.znaky.length) {   // animace znaků lekce
           var az = el('a', 'otevrit', 'Otevřít animace znaků ▸');
           az.href = 'znaky.html?l=' + encodeURIComponent(od.lekce || '') +
                     '&d=' + encodeURIComponent(JSON.stringify(od.znaky));
           az.target = '_blank'; az.rel = 'noopener';
-          karta.appendChild(az);
+          radekOdkazu.appendChild(az);
         }
+        if (radekOdkazu.childNodes.length) karta.appendChild(radekOdkazu);
       });
       s.appendChild(karta);
     });
