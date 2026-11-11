@@ -7,8 +7,8 @@
 <style>
   :root {
     --bg: #f3f4f8; --karta: #ffffff; --text: #232a3d; --slaby: #737b8c;
-    --akcent: #1c2a4d; --hotovo: #2fa37a; --cara: #e3e6ee; --tyden: #2a3150; --tyden-svetla: #e6e9f2;
-    --hlava: linear-gradient(100deg, #0d1b3a 0%, #17305f 55%, #0a1226 100%);
+    --akcent: #2f4a82; --hotovo: #2fa37a; --cara: #e3e6ee; --tyden: #2f4a82; --tyden-svetla: #e6e9f2;
+    --hlava: linear-gradient(100deg, #1a2f5c 0%, #2b4c8c 55%, #15244a 100%);
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
@@ -24,7 +24,7 @@
               color: var(--text); font-weight: 700; font-size: 13px; white-space: nowrap;
               box-shadow: 0 1px 3px rgba(30,50,60,.12); }
   .odkazy a b { font-size: 20px; line-height: 1.1; }
-  .tydny { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tydny { display: flex; gap: 6px; margin-bottom: 12px; }
   .tydny button { flex: 1; padding: 9px 0 7px; border: 0; border-radius: 14px; font: inherit;
                   font-weight: 700; font-size: 14px; cursor: pointer; color: var(--text); background: #e6e8ee; }
   .tydny button.vybrany { background: var(--tyden); border-color: var(--tyden); color: #fff;
@@ -46,7 +46,8 @@
   .zastavka.hotova i { background: var(--tyden); border-color: var(--tyden); }
   .zastavka.dnes i { border-color: var(--akcent); background: var(--karta); }
   .zastavka.dnes { color: var(--akcent); font-weight: 700; }
-  .zastavka.zvolno i { border-style: dashed; }
+  .zastavka.zvolno i { background: #f4b942; border-color: #f4b942; }
+  .zastavka.zvolno { color: #9a6b00; }
   .karta-dne { background: var(--karta); border-radius: 18px; margin-bottom: 14px; overflow: hidden;
                box-shadow: 0 1px 3px rgba(30,50,60,.10); }
   .karta-dne.dnes { box-shadow: 0 0 0 2px var(--akcent), 0 4px 14px rgba(30,50,60,.12); }
@@ -99,8 +100,8 @@
   <h1>Plán opakování</h1>
   <p class="podtitul">Ťukni na úkol, když ho máš hotový.</p>
   <div class="zprava" id="zprava"></div>
-  <div class="odkazy" id="odkazy"></div>
   <div class="tydny" id="tydny"></div>
+  <div class="odkazy" id="odkazy"></div>
   <div class="cesta" id="cesta" style="display:none"></div>
   <div id="seznam"><div class="nacitani">Načítám…</div></div>
   <p class="tip" id="dokChyba" style="display:none"></p>
@@ -166,7 +167,7 @@
     }
     return ANKI_ODKAZ;
   }
-  var BARVY_TYDNU = ['#2a3150'];                       // jedna klidná barva pro vybraný týden a cestu
+  var BARVY_TYDNU = ['#2f4a82'];                       // jedna klidná barva pro vybraný týden a cestu
   var SVETLE_TYDNU = ['#e6e9f2'];
   var BARVY_DNU = ['#f3f6f8'];                          // všechna záhlaví dnů stejně jemně šedá
 
@@ -236,6 +237,8 @@
 
     // cesta týdnem: zastávka za každý den
     var skupiny = dny();
+    var zastavkyDnu = skupiny.slice();
+    if (!zastavkyDnu.some(function (g) { return cisloDne(g.den) === 0; })) zastavkyDnu.push({ den: 'Den hodiny', radky: [] });
     var cesta = document.getElementById('cesta');
     cesta.style.display = 'block';
     cesta.innerHTML = '';
@@ -248,7 +251,7 @@
     var zast = el('div', 'zastavky');
     var ujeto = el('div', 'ujeto'); zast.appendChild(ujeto);
     var posledniHotova = -1;
-    skupiny.forEach(function (g, i) {
+    zastavkyDnu.forEach(function (g, i) {
       var uk = g.radky.filter(function (r) { return !r.volno; });
       var volno = !uk.length;
       var hotova = !volno && uk.every(function (r) { return r.hotovo[tyden]; });
@@ -259,7 +262,7 @@
       zast.appendChild(z);
     });
     cesta.appendChild(zast);
-    var n = skupiny.length;
+    var n = zastavkyDnu.length;
     requestAnimationFrame(function () {
       var sirka = zast.clientWidth - 14;
       ujeto.style.width = (n > 1 && posledniHotova > 0 ? sirka * posledniHotova / (n - 1) : 0) + 'px';
