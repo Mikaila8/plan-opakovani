@@ -483,7 +483,7 @@
     }
   }
 
-  function prepni(r, b) {
+   function prepni(r, b) {     if (NAHLED) { ukaz('Náhled – políčka se tady neodškrtávají.'); return; }
     var t = tyden;
     var nova = !r.hotovo[t];
     var klic = r.radek + '|' + t;
@@ -507,7 +507,9 @@
   var ID = new URLSearchParams(location.search).get('id') || '';
   var API = 'https://script.google.com/macros/s/' + encodeURIComponent(ID) + '/exec';
   KLIC = 'planOpakovani.tyden.' + ID;
-  var KLIC_STAV = 'planOpakovani.stav.' + ID;
+   var KLIC_STAV = 'planOpakovani.stav.' + ID;
+  var NAHLED = /[?&]nahled=1(&|$)/.test(location.search);   // náhled lektorky: stránka jako v den další hodiny
+  if (NAHLED) { KLIC += '.nahled'; KLIC_STAV += '.nahled'; }  // náhled nepřepíše uložený stav studenta
 
   function api(param) {
     var q = Object.keys(param).map(function (k) { return k + '=' + encodeURIComponent(param[k]); }).join('&');
@@ -531,7 +533,7 @@
       var ch = document.querySelector('.cesta-hlava span'); if (ch) ch.textContent += ' · aktualizuji…';
     }
     nacitam = true;
-    api({ akce: 'stav' })
+    api(NAHLED ? { akce: 'stav', nahled: 1 } : { akce: 'stav' })  
       .then(function (data) {
         nacitam = false;
         Object.keys(cekajici).forEach(function (k) {          // odškrtnutí z doby načítání nepřepsat
