@@ -98,9 +98,66 @@
   .serie b { display: block; font-size: 18px; font-weight: 800; }
   .serie b::before { content: "🔥 "; font-size: 15px; }
   .serie span { font-size: 11px; font-weight: 600; }
+
+  /* ---------- Dechová kotva (cvičení před plánem) ---------- */
+  /* Ma Shan Zheng (Google Fonts, licence OFL), jen znaky 吸 a 呼 */
+  @font-face { font-family:'MSZ XiHu'; src:url(data:font/woff2;base64,d09GMgABAAAAAAWQAA4AAAAACXAAAAU9AAIAxQAAAAAAAAAAAAAAAAAAAAAAAAAAGyAcIAZgADwRCAqKDIdQATYCJAMICwgABCAFg14HIAwHGzoHUZRMUpjiq4MyxvA1rMNYxyZJEgxpdh+JW19ff21Deicenj/8nfvu+/83xqKJ0cQsoDZGXhpooNPjAh0L0/YAnpoKk8mDaAIQrgYgbMABc1o64YfTVWyxl4S95A+1plDYH/KNAUvtXRL4NafrYP4vx5/uHd07wMl0Ims29qRtbYwwsLWwbVnAifU8UM02GyYkC6SxcGsdYhJ79/MEOkyhB9pS1zUFkCr84wDodM27KAQalBOwJQDYNrPFISAcgkBF2pxnd0dNBVg0lTSNhQTiMgH5HmGpR4iv8hNzwJwg1SHRQ1CoRdD0hxKTxOGg5Fs96cqVLvGP0wtzzk20iBtAPKzhAnusrhM3428yEuHQYdZWBXi9j0anKRkxylL76hrgem7zvGMdGQEi3wxJqUIefYtL5Y/jT2OCqS7Ns+J6BjHo3pxz157pqCCXqgBr2zqgmTURlnXma8FRtud1sxtQju0mSOB97zuXuU1vl7tEWppx0E6uA36bKijx1LdnC6X4K7eUgPO6tq1BO5lvcinu2j5q6kKlWy+Xqljj7SN/wxhj4yvRnZ4ixXSPWoovSS6hscsXy8r1ieXwzomm5T447mYrMO2xnYrGRx6qnunhIottzGcQ8N90F5BRdcMiZ8qYbeQ2vY531ozZGaXTK3u/XiqVbz76IJdWduNCKCoftasWrHMASp3L8l2hZG7zHdCoNR2GFa9toG4t+av46r7svVDZDWLNAmrQASS2z6f8VnsrRwgQNGqjazX4mae+o8nyc8BzwJWFpsGhrp7q7ZmeHuvh0X98v3D9Pdzayht7e/4urOCNoYE5jdmivB5t938YtBcGZwMxGpI2h1tJI9SzXZuDxRLUI6j5PNWVXHQ+aNu6axKZiMrIySNQqJnLJ8RjaBFMUdS5CMGMFIA4JoXpsEo5We4Fqa+qkf8qLmFYDsXhF41o7XMvc7iWLUZpPEiCSj3dmTRiR0PQOs+UdbK3RVjyqPignNlUGLdgIfUmMOj9HUZbEgz+93neSgRHBqZ3PAklpNaWyBPN9IxQErOYasM4/f9DS1rGNoxpkjqikgjWRqgi1qNKoEsBVXQmhWhWitR4N5iYSJJK9tYruQY44rsophQTDA0vEoQoTBFWsBpjEUJDr4bfUBE5o9C8M8DZqhUUqulBLll6JOS3U6rpwWLahdib7Yw7s1GbhkFTRMSIRBwJXh8BbOek+AZIq2gf5FmquoANIbkKKDWuGq9Ioul/opoohIQEOkrDmIX1lHsdXxXiBnJL+qxCPPbCWZkSigzjgqU2DbO4meDjLzagzUi4qiutMzGhm58FPmygN5DrTWbJe6kuBOf4GzW7pAUJcuNyHu7Cjgst7PrSk0/qIWdRgb2ZCqyCTExc6JIjZSZ16NEjFkI2YZSGJsfPkDIgIFTkWkhfQwhCYCrXUw/DWud/IITAVpMQsIY8AECguF1fa7NzIJD91gaBvIQ779EdAK/pozQ4wv+n+S5LAJqKV/pvGATGmU95qaox/lLG8AIhCyNAyAdMID3Z37JruyoK4AKhwoRxquhxT6VN91S1HNRUw0SoPt40H/aAigCBogTz4sFTKEbCBAmRJNV0DNxyepyYbAUn/qz1uD8PjAwFC+DNjYs/pyRMKIQFCBaic8YeCxUohDQBAjx4aS6MM35vIIDfzBcggDFfbtxz/kKFaMmPk5B0KFrn+pSFUUYZRTU2OQ9hfOfzgwnjJ0iQCBkwZ0WNiu1hpQl8Ab0mTWKUgDm3pQNeAnA5exB5DohK918LrKi/ClzaIDQPAAA=) format('woff2'); font-display:block; }
+  #dech { position: fixed; inset: 0; z-index: 100; overflow: hidden; color: #1f2440;
+          background: radial-gradient(70% 45% at 50% 38%, var(--bgStred, #fffaf5) 0%, var(--bgOkraj, #fef3e8) 100%);
+          transition: opacity .6s; }
+  #dech.skryty { opacity: 0; pointer-events: none; }
+  #dech[hidden] { display: none; }
+  #dVlny { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 52vh; }
+  #dech .d-scena { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; align-items: center;
+                   justify-content: center; padding-bottom: 16vh; }
+  #dKolo { width: min(78vw, 420px); height: min(78vw, 420px); }
+  #dech .d-ovladani { position: absolute; top: 14px; right: 14px; display: flex; gap: 6px; z-index: 2; }
+  #dech .d-ovladani button { width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.55);
+          cursor: pointer; display: grid; place-items: center; color: #3a3f5c; padding: 0; }
+  #dech .d-ovladani svg { width: 22px; height: 22px; }
+  #dech .d-panel { position: absolute; top: 66px; right: 14px; width: 270px; background: #fff; border-radius: 14px;
+          padding: 14px 16px; box-shadow: 0 10px 30px rgba(40,40,90,.18); font-size: 14px; display: none; z-index: 3; }
+  #dech .d-panel.ukaz { display: block; }
+  #dech .d-panel label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  #dech .d-panel small { display: block; color: #6b7090; margin-top: 8px; }
+  #dech .d-delka { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eceef6; }
+  #dech .d-krok { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+  #dech .d-krok button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #d9dcec; background: #fff;
+          font-size: 22px; cursor: pointer; color: #3a3f5c; }
+  #dech .d-krok b { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+  #dech .d-cip { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font: inherit; font-size: 14px;
+          padding: 10px 18px; border: 0; border-radius: 999px; background: rgba(255,255,255,.85); color: #3a3f5c;
+          cursor: pointer; z-index: 2; }
+  #dech .d-cip[hidden] { display: none; }
 </style>
 </head>
 <body>
+<div id="dech" hidden aria-label="Dechové cvičení">
+  <canvas id="dVlny" aria-hidden="true"></canvas>
+  <div class="d-scena"><canvas id="dKolo" width="840" height="840" aria-hidden="true"></canvas></div>
+  <div class="d-ovladani">
+    <button id="dZnovu" title="Pustit znovu" aria-label="Pustit znovu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </button>
+    <button id="dZvuk" title="Ztlumit zvuk" aria-label="Ztlumit zvuk"></button>
+    <button id="dNast" title="Nastavení" aria-label="Nastavení">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button id="dZavrit" title="Přeskočit cvičení" aria-label="Přeskočit cvičení">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="d-panel" id="dPanel">
+    <label><input type="checkbox" id="dZapnuto" checked> <span>Dechové cvičení při otevření stránky<br><small>(poprvé dopoledne a poprvé odpoledne)</small></span></label>
+    <div class="d-delka">
+      <span>Délka dechu</span>
+      <div class="d-krok"><button id="dKratsi" aria-label="Kratší dech">−</button><b id="dDelkaText">0 s</b><button id="dDelsi" aria-label="Delší dech">+</button></div>
+      <small id="dDelkaPopis"></small>
+    </div>
+  </div>
+  <button class="d-cip" id="dCip" hidden>Klepni pro zapnutí zvuku</button>
+  <audio id="dAudio" src="dech.mp3" preload="auto"></audio>
+</div>
 <main>
   <canvas id="platno"></canvas>
   <div class="zahlavi">
@@ -483,7 +540,8 @@
     }
   }
 
-   function prepni(r, b) {     if (NAHLED) { ukaz('Náhled – políčka se tady neodškrtávají.'); return; }
+  function prepni(r, b) {
+    if (NAHLED) { ukaz('Náhled – políčka se tady neodškrtávají.'); return; }
     var t = tyden;
     var nova = !r.hotovo[t];
     var klic = r.radek + '|' + t;
@@ -507,7 +565,7 @@
   var ID = new URLSearchParams(location.search).get('id') || '';
   var API = 'https://script.google.com/macros/s/' + encodeURIComponent(ID) + '/exec';
   KLIC = 'planOpakovani.tyden.' + ID;
-   var KLIC_STAV = 'planOpakovani.stav.' + ID;
+  var KLIC_STAV = 'planOpakovani.stav.' + ID;
   var NAHLED = /[?&]nahled=1(&|$)/.test(location.search);   // náhled lektorky: stránka jako v den další hodiny
   if (NAHLED) { KLIC += '.nahled'; KLIC_STAV += '.nahled'; }  // náhled nepřepíše uložený stav studenta
 
@@ -544,6 +602,7 @@
         var byloZobrazeno = !!stav;
         stav = data;
         ulozCache();
+        if (window.dechZTabulky) window.dechZTabulky(data.dech);   // nastavení dechové kotvy z tabulky
         if (!stav.radky.length) {
           document.getElementById('seznam').innerHTML = '<div class="nacitani">V plánu nejsou žádné aktivity.</div>';
           return;
@@ -560,5 +619,273 @@
   }
   start();
 </script>
+<script>
+/* ---------- Dechová kotva (finální verze 22. 11. 2026 = ukázka B) ----------
+   ZATÍM JEN V NÁHLEDU LEKTORKY (&nahled=1, 26. 11. 2026): v náhledu se ukáže při každém otevření a nastavení se
+   ukládá jen v tomto prohlížeči (do tabulky studenta se nic nezapisuje). Student kotvu nevidí.
+   Až bude kotva hotová pro studenty: DECH_PRO_STUDENTA = true – pak se studentovi ukáže při prvním otevření
+   dopoledne a při prvním otevření odpoledne a nastavení se ukládá do jeho tabulky.
+   4 dechy: nádech 4,8 s (吸), zadržet 0,5 s, výdech 5,8 s (呼), pauza 1 s – musí sedět se zvukem dech.mp3.
+   Nastavení (zapnuto / délka dechu) se ukládá do tabulky studenta (K13:L14) přes akci „dech“. */
+var DECH_PRO_STUDENTA = false;                           // false = kotva jen v náhledu lektorky (&nahled=1)
+(function () {
+  var box = document.getElementById('dech');
+  if (!box || !ID || (!NAHLED && !DECH_PRO_STUDENTA)) return;
+  var KLIC_DECH = 'planOpakovani.dech.' + ID + (NAHLED ? '.nahled' : '');      // { zapnuto, posun }
+  var KLIC_SLOT = 'planOpakovani.dechSlot.' + ID + (NAHLED ? '.nahled' : '');  // kdy se cvičení naposledy ukázalo
+  function nactiNast() { try { return JSON.parse(localStorage.getItem(KLIC_DECH)) || {}; } catch (e) { return {}; } }
+  function ulozNast(n) { try { localStorage.setItem(KLIC_DECH, JSON.stringify(n)); } catch (e) {} }
+  var nast = nactiNast();
+  if (nast.zapnuto === undefined) nast.zapnuto = true;
+  if (typeof nast.posun !== 'number') nast.posun = 0;
+
+  var LEAD = 1.0, IN = 4.8, HOLD = 0.5, OUT = 5.8, GAP = 1.0, N = 4;
+  var ZAKLAD = { IN: IN, HOLD: HOLD, OUT: OUT, GAP: GAP }, S = 1, CYKL, KONEC;
+  function prepocitej() {                                 // délka dechu: celé cvičení i zvuk úměrně (playbackRate)
+    S = (ZAKLAD.IN + nast.posun) / ZAKLAD.IN;
+    IN = ZAKLAD.IN * S; HOLD = ZAKLAD.HOLD * S; OUT = ZAKLAD.OUT * S; GAP = ZAKLAD.GAP * S;
+    CYKL = IN + HOLD + OUT + GAP; KONEC = LEAD + N * CYKL;
+  }
+  prepocitej();
+
+  var cv = document.getElementById('dKolo'), g = cv.getContext('2d');
+  var zvuk = document.getElementById('dAudio'), bZvuk = document.getElementById('dZvuk'), cip = document.getElementById('dCip');
+  var bezPohybu = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bezi = false, aktivni = false, start0 = 0, hotovo = false;
+  function casNaZvuk(c) { return c < LEAD ? c : LEAD + (c - LEAD) / S; }
+  function zvukNaCas(z) { return z < LEAD ? z : LEAD + (z - LEAD) * S; }
+
+  var IKONA_ZVUK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  var IKONA_TICHO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M16 9l5 6M21 9l-5 6"/></svg>';
+  function ikonaZvuku() { bZvuk.innerHTML = zvuk.muted ? IKONA_TICHO : IKONA_ZVUK; bZvuk.title = zvuk.muted ? 'Zapnout zvuk' : 'Ztlumit zvuk'; }
+  ikonaZvuku();
+
+  function cas() { return bezi ? (performance.now() - start0) / 1000 : 0; }   // čas podle hodin, ke zvuku se jednou srovná
+  zvuk.addEventListener('playing', function () { if (bezi) start0 = performance.now() - zvukNaCas(zvuk.currentTime) * 1000; });
+  function ease(t) { return 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, t))); }
+  function prolni(x) { return x < 0.12 ? ease(x / 0.12) : 1 - ease((x - 0.12) / 0.88); }   // znak: rychle se objeví, pak mizí
+  function faze(t) {                                      // v = velikost kola 0..1, znak 吸 / 呼, pruh = krytí znaku
+    if (!bezi || t < LEAD || t >= KONEC) return { v: 0, znak: '', pruh: 0 };
+    var k = Math.floor((t - LEAD) / CYKL), u = (t - LEAD) - k * CYKL;
+    if (u < IN) return { v: 1 - Math.pow(1 - u / IN, 2.2), znak: '吸', pruh: prolni(u / IN), k: k };
+    if (u < IN + HOLD) return { v: 1, znak: '', pruh: 0, k: k };
+    if (u < IN + HOLD + OUT) return { v: Math.pow(1 - (u - IN - HOLD) / OUT, 2.2), znak: '呼', pruh: prolni((u - IN - HOLD) / OUT), k: k };
+    return { v: 0, znak: '', pruh: 0 };
+  }
+
+  // vlny ve stylu rytiny (přerušovaná šrafa, barevné oblasti v barvách kolečka)
+  var vc = document.getElementById('dVlny'), vg = vc.getContext('2d');
+  function velikostVln() { var d = window.devicePixelRatio || 1; vc.width = vc.clientWidth * d; vc.height = vc.clientHeight * d; vg.setTransform(d, 0, 0, d, 0, 0); }
+  window.addEventListener('resize', function () { if (aktivni) velikostVln(); });
+  var INKOUST = '#1f2d5c', PAPIR = '#fbfcff', BAR = ['#4f7dff', '#9b72f2', '#d96570', '#22bee8'];
+  function sumL(x, s) {
+    var i = Math.floor(x), f = x - i, h = function (n) { var v = Math.sin(n * 127.1 + s * 311.7) * 43758.5453; return v - Math.floor(v); };
+    var u = f * f * (3 - 2 * f); return h(i) * (1 - u) + h(i + 1) * u;
+  }
+  var VRSTVY = [ { y: 0.30, A: 46, k: 0.016, rych: 0.35, hl: 0.42 }, { y: 0.62, A: 68, k: 0.012, rych: -0.28, hl: 0.60 } ];
+  function hladina(V, x, c, A) { return A * (0.65 * Math.sin(V.k * x + c * V.rych) + 0.35 * Math.sin(V.k * 1.9 * x - c * V.rych * 0.7 + 1.3)); }
+  function vrstva(W, H, V, i, ur, c) {
+    var A = V.A * (0.25 + 0.75 * ur), zakl = H * V.y + (1 - ur) * H * 0.07, hloubka = H * V.hl, KROK = 3, x;
+    vg.beginPath(); vg.moveTo(0, H);
+    for (x = 0; x <= W; x += KROK) vg.lineTo(x, zakl - hladina(V, x, c, A));
+    vg.lineTo(W, H); vg.closePath(); vg.fillStyle = PAPIR; vg.fill();
+    vg.lineCap = 'round';
+    var drift = c * V.rych * 6, pas = W * 0.9, off = ((c * 18 * (i ? -1 : 1) + i * 240) % (pas * 3) + pas * 3) % (pas * 3);   // přetáčí se po celé periodě barev – bez skoku
+    var barvy = vg.createLinearGradient(-off, 0, pas * 6 - off, 0);
+    for (var q = 0; q <= 24; q++) barvy.addColorStop(q / 24, q % 3 !== 0 ? BAR[(Math.floor(q / 3) + i) % 4] : INKOUST);
+    for (var j = 0, d = 0; d < hloubka; j++) {
+      var f = d / hloubka, kresli = false;
+      vg.strokeStyle = j === 0 ? INKOUST : barvy;
+      vg.lineWidth = j === 0 ? 2.6 : 1.7 - 0.9 * f;
+      vg.globalAlpha = j === 0 ? 1 : 0.95 - 0.45 * f;
+      vg.beginPath();
+      for (x = 0; x <= W; x += KROK) {
+        var y = zakl + d - hladina(V, x, c, A) * (1 - f * 0.85);
+        var svah = (hladina(V, x + 4, c, A) - hladina(V, x - 4, c, A)) / 8;
+        var tma = j === 0 ? 1 : Math.max(0.45 - 0.2 * f, 0.8 - 0.4 * f + 1.4 * svah);
+        var vid = sumL((x + drift * 20) * 0.045 + j * 7.3, i) < tma;
+        if (vid && !kresli) { vg.moveTo(x, y); kresli = true; } else if (vid) vg.lineTo(x, y); else kresli = false;
+      }
+      vg.stroke();
+      d += 3.6 + f * 4.5;
+    }
+    vg.globalAlpha = 1;
+  }
+
+
+  // kudrlinky: vyrůstají z linky přední vlny a ze šrafy uvnitř vody, při nádechu se navlní a vyrolují, při výdechu zmizí
+  function nahoda(a, b) { var v = Math.sin(a * 91.7 + b * 47.3) * 43758.5453; return v - Math.floor(v); }
+  function kudrlinkaNaVlne(yH, xs, vel, a, wob, barva) {
+    var L = vel * 3.0;
+    var vyska = Math.min(1, a / 0.55); vyska = vyska * vyska * (3 - 2 * vyska);
+    var role = Math.max(0, Math.min(1, (a - 0.4) / 0.6)); role = role * role * (3 - 2 * role);
+    var Ak = vel * (0.9 + 0.15 * Math.sin(wob)) * vyska;
+    var xc = xs + L * (0.12 + 0.05 * Math.sin(wob * 0.7));
+    function boule(x) {
+      var u = x < xc ? (x - (xs - L / 2)) / (xc - (xs - L / 2)) : 1 - (x - xc) / ((xs + L / 2) - xc);
+      u = Math.max(0, Math.min(1, u)); u = u * u * (3 - 2 * u);
+      if (x > xc && role > 0) u *= (1 - 0.85 * role);
+      return Ak * u;
+    }
+    var yc = yH(xc) - Ak, x0 = xs - L / 2, x1 = xs + L / 2, x;
+    vg.globalAlpha = Math.min(1, a * 4);
+    if (Ak > 1) {                                       // podklad zakryje i původní linku pod vlnkou
+      vg.beginPath(); vg.moveTo(x0, yH(x0) + 3);
+      for (x = x0; x <= x1; x += 3) vg.lineTo(x, yH(x) - boule(x));
+      for (x = x1; x >= x0; x -= 3) vg.lineTo(x, yH(x) + 3);
+      vg.closePath(); vg.fillStyle = PAPIR; vg.fill();
+    }
+    vg.strokeStyle = barva || INKOUST; vg.lineCap = 'round'; vg.lineJoin = 'round'; vg.lineWidth = 2.4;
+    vg.beginPath(); vg.moveTo(x0, yH(x0));
+    for (x = x0; x <= xc; x += 3) vg.lineTo(x, yH(x) - boule(x));
+    vg.lineTo(xc, yc);
+    if (role > 0) {
+      var r = Ak * (0.4 + 0.05 * Math.sin(wob * 1.3)), cx = xc + r * 0.3, cy = yc + r;
+      var a0 = Math.atan2(yc - cy, xc - cx), otoc = role * Math.PI * (2.2 + 0.2 * Math.sin(wob)), R0 = Math.hypot(xc - cx, yc - cy);
+      for (var s = 0; s <= 1.0001; s += 0.04) { var an = a0 + s * otoc, rr = R0 * (1 - 0.75 * s * role); vg.lineTo(cx + Math.cos(an) * rr, cy + Math.sin(an) * rr); }
+      vg.moveTo(xc + r * 1.2, yH(xc + r * 1.2) - boule(xc + r * 1.2));
+    }
+    for (x = xc + (role > 0 ? Ak * 0.5 : 0); x <= x1; x += 3) vg.lineTo(x, yH(x) - boule(x));
+    vg.stroke();
+    vg.globalAlpha = 1;
+  }
+  function hexRgb(h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
+  function barvaVlny(i, x, W, c) {                      // barva šrafy v místě x
+    var pas = W * 0.9, off = ((c * 18 * (i ? -1 : 1) + i * 240) % (pas * 3) + pas * 3) % (pas * 3);   // přetáčí se po celé periodě barev – bez skoku
+    var q = Math.max(0, Math.min(24, (x + off) / (pas * 6) * 24)), q0 = Math.floor(q), q1 = Math.min(24, q0 + 1), f = q - q0;
+    var col = function (k) { return hexRgb(k % 3 !== 0 ? BAR[(Math.floor(k / 3) + i) % 4] : INKOUST); };
+    var a = col(q0), b = col(q1);
+    return 'rgb(' + [0, 1, 2].map(function (n) { return Math.round(a[n] + (b[n] - a[n]) * f); }).join(',') + ')';
+  }
+  function kudrlinky(W, H, V, i, ur, c, dech) {
+    var A = V.A * (0.25 + 0.75 * ur), zakl = H * V.y + (1 - ur) * H * 0.07, predni = i === VRSTVY.length - 1;
+    var mista = predni ? [0, 0, 1, 1] : [1, 1];         // 0 = hlavní linka přední vlny, 1 = uvnitř vody
+    for (var q = 0; q < mista.length; q++) {
+      var s = q + i * 10;
+      if (nahoda(s + 1, dech) < 0.3) continue;
+      var start = 0.25 + 0.3 * nahoda(s + 11, dech), a = Math.max(0, Math.min(1, (ur - start) / (1 - start)));
+      if (a <= 0) continue;
+      var vel = 12 + 30 * Math.pow(nahoda(s + 21, dech), 1.4); if (mista[q]) vel *= 0.8;
+      var xs = ((nahoda(s + 31, dech) * W + c * (12 + 10 * nahoda(s, dech))) % (W + 120)) - 60;
+      var hl = mista[q] ? 18 + nahoda(s + 61, dech) * H * V.hl * 0.45 : 0, f = hl / (H * V.hl);
+      var yH = (function (h, ff) { return function (x) { return zakl + h - hladina(V, x, c, A) * (1 - ff * 0.85); }; })(hl, f);
+      kudrlinkaNaVlne(yH, xs, vel, a, c * 1.7 + s * 2, mista[q] ? barvaVlny(i, xs, W, c) : (nahoda(s + 41, dech) > 0.5 ? barvaVlny(i, xs, W, c) : INKOUST));
+    }
+  }
+
+  // pozadí: výdech = broskvová, nádech = světle modrá
+  var BG_VYDECH = [[255,250,245],[254,243,232]], BG_NADECH = [[247,251,255],[219,234,250]];
+  function mix(a, b, v) { return 'rgb(' + a.map(function (x, i) { return Math.round(x + (b[i] - x) * v); }).join(',') + ')'; }
+  function pozadi(v) { box.style.setProperty('--bgStred', mix(BG_VYDECH[0], BG_NADECH[0], v)); box.style.setProperty('--bgOkraj', mix(BG_VYDECH[1], BG_NADECH[1], v)); }
+
+  var BARVY_KOLA = [[79,125,255],[155,114,242],[217,101,112],[34,190,238]];
+  function snimek(now) {
+    if (!aktivni) return;
+    var t = cas(), f = faze(t), W = cv.width, c = W / 2, i;
+    var zivot = bezPohybu ? 0 : now / 1000, r = W * (0.18 + 0.15 * f.v);
+    var VW = vc.clientWidth, VH = vc.clientHeight;
+    vg.clearRect(0, 0, VW, VH);
+    for (i = 0; i < VRSTVY.length; i++) { vrstva(VW, VH, VRSTVY[i], i, bezi ? f.v : 0.2, zivot); kudrlinky(VW, VH, VRSTVY[i], i, bezi ? f.v : 0.2, zivot, f.k || 0); }
+    pozadi(f.v);
+    g.clearRect(0, 0, W, W);
+    g.globalCompositeOperation = 'lighter';
+    for (i = 0; i < BARVY_KOLA.length; i++) {               // barevná záře
+      var a = zivot * (0.35 + i * 0.08) + i * Math.PI / 2, off = r * (0.28 + 0.06 * Math.sin(zivot * 0.9 + i));
+      var x = c + Math.cos(a) * off, y = c + Math.sin(a) * off, rr = r * (0.95 + 0.08 * Math.sin(zivot * 1.3 + i * 2));
+      var gr = g.createRadialGradient(x, y, 0, x, y, rr), b = BARVY_KOLA[i];
+      gr.addColorStop(0, 'rgba(' + b + ',0.75)'); gr.addColorStop(0.55, 'rgba(' + b + ',0.35)'); gr.addColorStop(1, 'rgba(' + b + ',0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(x, y, rr, 0, Math.PI * 2); g.fill();
+    }
+    g.globalCompositeOperation = 'source-over';
+    var rj = r * (0.44 + 0.015 * f.v), jx = c + Math.sin(zivot * 0.7) * r * 0.025, jy = c + Math.cos(zivot * 0.55) * r * 0.025;   // bílé jádro „těsto“ (drží se uvnitř kola)
+    var jadro = g.createRadialGradient(jx, jy, 0, jx, jy, rj * 1.1);
+    jadro.addColorStop(0, 'rgba(255,255,255,1)'); jadro.addColorStop(1, 'rgba(246,244,255,0.95)');
+    g.fillStyle = jadro; g.shadowColor = 'rgba(255,255,255,0.9)'; g.shadowBlur = 14;
+    g.beginPath();
+    for (var k = 0; k <= 120; k++) {
+      var an = k / 120 * Math.PI * 2;
+      var m = 1 + 0.05 * Math.sin(2 * an + zivot * 0.9) + 0.033 * Math.sin(3 * an - zivot * 1.15 + 1.3) + 0.017 * Math.sin(4 * an + zivot * 0.6 + 2.1);
+      if (k === 0) g.moveTo(jx + Math.cos(an) * rj * m, jy + Math.sin(an) * rj * m); else g.lineTo(jx + Math.cos(an) * rj * m, jy + Math.sin(an) * rj * m);
+    }
+    g.closePath(); g.fill(); g.shadowBlur = 0;
+    if (f.znak && f.pruh > 0) {                              // 吸 modře, 呼 oranžově, nejvýš 90 % krytí
+      g.globalAlpha = f.pruh * 0.9;
+      g.fillStyle = f.znak === '吸' ? '#2f6fe4' : '#f08a24';
+      g.font = Math.round(rj * 0.95) + 'px "MSZ XiHu", KaiTi, STKaiti, serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(f.znak, jx, jy + rj * 0.04);
+      g.globalAlpha = 1;
+    }
+    if (bezi && t >= KONEC && !hotovo) { hotovo = true; setTimeout(zavrit, 1200); }
+    requestAnimationFrame(snimek);
+  }
+
+  function spustit() {
+    hotovo = false; bezi = true; start0 = performance.now();
+    zvuk.pause(); zvuk.currentTime = 0; zvuk.playbackRate = 1 / S;
+    var p = zvuk.play();
+    if (p && p.catch) p.catch(function () { cip.hidden = false; });      // prohlížeč zablokoval zvuk bez klepnutí
+  }
+  function zapnoutZvuk() {
+    if (!bezi || !zvuk.paused) return;
+    zvuk.currentTime = casNaZvuk((performance.now() - start0) / 1000); zvuk.playbackRate = 1 / S;
+    var p = zvuk.play(); if (p && p.then) p.then(function () { cip.hidden = true; }).catch(function () {});
+  }
+  function otevrit() {
+    box.hidden = false; box.classList.remove('skryty'); aktivni = true;
+    velikostVln();
+    if (document.fonts && document.fonts.load) document.fonts.load('40px "MSZ XiHu"', '吸呼');
+    requestAnimationFrame(snimek);
+    spustit();
+  }
+  function zavrit() {
+    bezi = false; zvuk.pause(); cip.hidden = true;
+    box.classList.add('skryty');
+    setTimeout(function () { aktivni = false; box.hidden = true; }, 650);
+  }
+
+  // nastavení
+  function delkaUI() {
+    var fmt = function (x) { return (Math.round(x * 10) / 10).toString().replace('.', ','); };
+    document.getElementById('dDelkaText').textContent = (nast.posun > 0 ? '+' : nast.posun < 0 ? '−' : '') + fmt(Math.abs(nast.posun)) + ' s';
+    document.getElementById('dDelkaPopis').textContent = 'nádech ' + fmt(IN) + ' s · výdech ' + fmt(OUT) + ' s';
+    document.getElementById('dZapnuto').checked = !!nast.zapnuto;
+  }
+  function ulozNaServer() {
+    ulozNast(nast);
+    if (NAHLED) return;                                   // náhled: nastavení jen v tomto prohlížeči
+    api({ akce: 'dech', zapnuto: nast.zapnuto ? 1 : 0, posun: nast.posun }).catch(function () {});
+  }
+  document.getElementById('dKratsi').onclick = function () { nast.posun = Math.max(-1.5, Math.round((nast.posun - 0.25) * 4) / 4); prepocitej(); delkaUI(); ulozNaServer(); spustit(); };
+  document.getElementById('dDelsi').onclick = function () { nast.posun = Math.min(1.5, Math.round((nast.posun + 0.25) * 4) / 4); prepocitej(); delkaUI(); ulozNaServer(); spustit(); };
+  document.getElementById('dZapnuto').onchange = function () { nast.zapnuto = this.checked; ulozNaServer(); };
+  document.getElementById('dNast').onclick = function () { document.getElementById('dPanel').classList.toggle('ukaz'); };
+  document.getElementById('dZnovu').onclick = spustit;
+  document.getElementById('dZavrit').onclick = zavrit;
+  bZvuk.onclick = function () { zvuk.muted = !zvuk.muted; ikonaZvuku(); };
+  cip.onclick = zapnoutZvuk;
+  box.addEventListener('pointerdown', function (e) { if (!e.target.closest('.d-ovladani') && !e.target.closest('.d-panel')) zapnoutZvuk(); });
+  delkaUI();
+
+  // nastavení z tabulky (přijde s načtením plánu) – platí od příštího otevření, běžící cvičení nepřeruší
+  window.dechZTabulky = function (d) {
+    if (!d || NAHLED) return;                            // náhled si drží vlastní nastavení
+    nast.zapnuto = d.zapnuto !== false;
+    nast.posun = Math.max(-1.5, Math.min(1.5, Number(d.posun) || 0));
+    ulozNast(nast);
+    if (!bezi) { prepocitej(); }
+    delkaUI();
+  };
+
+  // ukázat poprvé dopoledne a poprvé odpoledne
+  var ted = new Date(), slot = ted.getFullYear() + '-' + (ted.getMonth() + 1) + '-' + ted.getDate() + (ted.getHours() < 12 ? '-dop' : '-odp');
+  var posledni = null; try { posledni = localStorage.getItem(KLIC_SLOT); } catch (e) {}
+  if (NAHLED || (nast.zapnuto && posledni !== slot)) {  // náhled: při každém otevření
+    try { localStorage.setItem(KLIC_SLOT, slot); } catch (e) {}
+    otevrit();
+  }
+})();
+</script>
+
 </body>
 </html>
